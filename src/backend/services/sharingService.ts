@@ -1,21 +1,7 @@
-import { supabase } from '../../backend/lib/supabase';
-import type { User } from './auth.service';
-
-interface SharedUser {
-  id: string;
-  email: string;
-  username: string;
-}
-
-interface SharedMatrix {
-  id: string;
-  name: string;
-  description: string | null;
-  owner: SharedUser;
-}
+import { supabase } from '../lib/supabase';
 
 export const sharingService = {
-  async shareMatrix(matrixId: string, userEmail: string): Promise<void> {
+  async shareMatrix(matrixId: string, userEmail: string) {
     // First, find the user by email
     const { data: userData, error: userError } = await supabase
       .from('users')
@@ -26,21 +12,23 @@ export const sharingService = {
     if (userError) throw userError;
 
     // Then create the sharing relationship
-    const { error } = await supabase
+    const { data, error } = await supabase
       .from('user_matrices')
       .insert({
         user_id: userData.id,
         matrix_id: matrixId,
-        active: true,
-      });
+      })
+      .select()
+      .single();
 
     if (error) throw error;
+    return data;
   },
 
-  async unshareMatrix(matrixId: string, userId: string): Promise<void> {
+  async unshareMatrix(matrixId: string, userId: string) {
     const { error } = await supabase
       .from('user_matrices')
-      .update({ active: false })
+      .delete()
       .match({
         matrix_id: matrixId,
         user_id: userId,
@@ -49,31 +37,30 @@ export const sharingService = {
     if (error) throw error;
   },
 
-  async getSharedUsers(matrixId: string): Promise<SharedUser[]> {
+  async getSharedUsers(matrixId: string) {
     const { data, error } = await supabase
       .from('user_matrices')
       .select(`
+        user_id,
         users:users(
           id,
           email,
           username
         )
       `)
-      .eq('matrix_id', matrixId)
-      .eq('active', true);
+      .eq('matrix_id', matrixId);
 
     if (error) throw error;
-    return data.map(d => d.users);
+    return data;
   },
 
-  async getSharedMatrices(userId: string): Promise<SharedMatrix[]> {
+  async getSharedMatrices(userId: string) {
     const { data, error } = await supabase
       .from('user_matrices')
       .select(`
+        matrix_id,
         matrices:matrices(
-          id,
-          name,
-          description,
+          *,
           owner:users(
             id,
             email,
@@ -81,13 +68,9 @@ export const sharingService = {
           )
         )
       `)
-      .eq('user_id', userId)
-      .eq('active', true);
+      .eq('user_id', userId);
 
     if (error) throw error;
-    return data.map(d => ({
-      ...d.matrices,
-      owner: d.matrices.owner,
-    }));
+    return data;
   },
 }; 

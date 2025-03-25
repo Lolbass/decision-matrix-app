@@ -16,6 +16,7 @@ export interface DecisionMatrix {
   id: string;
   name: string;
   description: string;
+  ownerId: string;
   criteria: Criterion[];
   options: Option[];
   createdAt: Date;

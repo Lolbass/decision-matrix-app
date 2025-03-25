@@ -34,6 +34,18 @@ export interface Database {
         Insert: Omit<Database['public']['Tables']['matrices']['Row'], 'id' | 'created_at' | 'updated_at'>
         Update: Partial<Database['public']['Tables']['matrices']['Insert']>
       }
+      user_matrices: {
+        Row: {
+          id: string
+          user_id: string
+          matrix_id: string
+          created_at: string
+          updated_at: string
+          active: boolean
+        }
+        Insert: Omit<Database['public']['Tables']['user_matrices']['Row'], 'id' | 'created_at' | 'updated_at'>
+        Update: Partial<Database['public']['Tables']['user_matrices']['Insert']>
+      }
       criteria: {
         Row: {
           id: string
@@ -74,18 +86,15 @@ export interface Database {
         Insert: Omit<Database['public']['Tables']['option_criteria']['Row'], 'id' | 'created_at' | 'updated_at'>
         Update: Partial<Database['public']['Tables']['option_criteria']['Insert']>
       }
-      user_matrices: {
-        Row: {
-          id: string
-          user_id: string
-          matrix_id: string
-          created_at: string
-          updated_at: string
-          active: boolean
-        }
-        Insert: Omit<Database['public']['Tables']['user_matrices']['Row'], 'id' | 'created_at' | 'updated_at'>
-        Update: Partial<Database['public']['Tables']['user_matrices']['Insert']>
-      }
+    }
+    Views: {
+      [_ in never]: never
+    }
+    Functions: {
+      [_ in never]: never
+    }
+    Enums: {
+      [_ in never]: never
     }
   }
 } 

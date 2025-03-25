@@ -1,84 +1,107 @@
-# Decision Matrix Application
+# Decision Matrix App
 
-A modern web application for creating and managing decision matrices. This tool helps you make objective decisions by evaluating multiple options against predefined criteria with weighted importance.
+A modern web application for creating and managing decision matrices. Built with React, TypeScript, and Supabase.
 
 ## Features
 
-- Create and manage decision matrices with custom names and descriptions
-- Add, edit, and remove criteria with weighted importance
-- Add, edit, and remove options
-- Score options against criteria using a 1-5 scale
-- Real-time calculation of weighted scores
-- Automatic identification of the best option
-- Responsive design that works on all devices
-- Modern, clean user interface
+- 🔐 Simplified authentication (email-based)
+- 📊 Create and manage decision matrices
+- ⚖️ Define criteria with weights
+- 📝 Add and evaluate options
+- 📈 Automatic score calculation
+- 🎨 Modern, responsive UI
+- 🔄 Real-time updates
+
+## Tech Stack
+
+- **Frontend:**
+  - React 18
+  - TypeScript
+  - Bootstrap 5
+  - React Bootstrap
+  - React Icons
+
+- **Backend:**
+  - Supabase (PostgreSQL)
+  - Row Level Security (RLS)
+  - Real-time subscriptions
+
+## Project Structure
+
+```
+src/
+├── frontend/
+│   ├── components/     # React components
+│   ├── types/         # TypeScript type definitions
+│   └── utils/         # Frontend utility functions
+├── backend/
+│   ├── lib/           # Backend library code
+│   └── services/      # Backend services
+└── App.tsx            # Main application component
+```
 
 ## Getting Started
 
-### Prerequisites
-
-- Node.js (v14 or higher)
-- npm (v6 or higher)
-
-### Installation
-
 1. Clone the repository:
-```bash
-git clone <repository-url>
-cd decision-matrix
-```
+   ```bash
+   git clone https://github.com/yourusername/decision_matrix.git
+   cd decision_matrix
+   ```
 
 2. Install dependencies:
-```bash
-npm install
-```
+   ```bash
+   npm install
+   ```
 
-3. Start the development server:
-```bash
-npm run dev
-```
+3. Set up environment variables:
+   Create a `.env` file in the root directory with the following variables:
+   ```
+   VITE_SUPABASE_URL=your_supabase_project_url
+   VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+   ```
 
-4. Open your browser and navigate to `http://localhost:5173`
+4. Start the development server:
+   ```bash
+   npm run dev
+   ```
 
-## Usage
+5. Open your browser and navigate to `http://localhost:5173`
 
-1. **Create a New Decision Matrix**
-   - Enter a name and optional description for your decision matrix
-   - This helps identify the purpose of your decision-making process
+## Database Schema
 
-2. **Add Criteria**
-   - Click "Add New Criterion" to define factors that are important for your decision
-   - For each criterion:
-     - Enter a name
-     - Assign a weight (percentage)
-     - Add an optional description
-   - Ensure the total weight of all criteria equals 100%
+The application uses the following main tables:
 
-3. **Add Options**
-   - Click "Add New Option" to add choices you want to evaluate
-   - For each option:
-     - Enter a name
-     - Add an optional description
-     - Rate the option against each criterion using the 1-5 scale
+- `users`: User information
+- `matrices`: Decision matrices
+- `criteria`: Evaluation criteria
+- `options`: Decision options
+- `option_criteria`: Option scores for each criterion
+- `user_matrices`: User-matrix relationships
 
-4. **View Results**
-   - The application automatically calculates weighted scores for each option
-   - The best option is highlighted based on the highest total score
-   - A detailed breakdown of all scores is provided
+## Authentication
 
-## Technical Details
-
-This application is built using:
-
-- React with TypeScript for type safety
-- Vite for fast development and building
-- Tailwind CSS for styling
-- Headless UI and Heroicons for UI components
+The application uses a simplified authentication system:
+- Sign up with email and username
+- Sign in with email
+- No password management required
+- Automatic user creation on first sign-in
 
 ## Contributing
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
 ## License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Acknowledgments
+
+- [React](https://reactjs.org/)
+- [TypeScript](https://www.typescriptlang.org/)
+- [Supabase](https://supabase.com/)
+- [Bootstrap](https://getbootstrap.com/)
+- [React Bootstrap](https://react-bootstrap.github.io/)

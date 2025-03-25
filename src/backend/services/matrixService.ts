@@ -1,11 +1,9 @@
 import { supabase } from '../lib/supabase';
 import type { Database } from '../types/database.types';
 
-type Matrix = Database['public']['Tables']['matrices']['Row'];
 type MatrixInsert = Database['public']['Tables']['matrices']['Insert'];
 type Criterion = Database['public']['Tables']['criteria']['Row'];
 type Option = Database['public']['Tables']['options']['Row'];
-type OptionCriterion = Database['public']['Tables']['option_criteria']['Row'];
 
 export const matrixService = {
   async getMatrices() {
