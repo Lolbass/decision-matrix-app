@@ -1,22 +1,32 @@
 import { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthPage } from './frontend/components/AuthPage';
 import { MatrixApp } from './frontend/components/MatrixApp';
-import { authService } from './backend/services/authService';
+import { Home } from './frontend/components/Home';
+import { supabase } from './backend/lib/supabase';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Check if user is authenticated
-    authService.getCurrentUser().then(user => {
-      setIsAuthenticated(!!user);
-      setLoading(false);
-    });
+    // Get the initial session
+    const initSession = async () => {
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
+        setIsAuthenticated(!!session);
+      } catch (error) {
+        console.error('Error getting session:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    initSession();
 
     // Subscribe to auth state changes
-    const { data: { subscription } } = authService.onAuthStateChange((user) => {
-      setIsAuthenticated(!!user);
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setIsAuthenticated(!!session);
     });
 
     return () => {
@@ -34,11 +44,42 @@ function App() {
     );
   }
 
-  if (!isAuthenticated) {
-    return <AuthPage onAuthSuccess={() => setIsAuthenticated(true)} />;
-  }
-
-  return <MatrixApp onSignOut={() => setIsAuthenticated(false)} />;
+  return (
+    <Router>
+      <Routes>
+        <Route 
+          path="/" 
+          element={
+            isAuthenticated ? (
+              <Home />
+            ) : (
+              <AuthPage onAuthSuccess={() => setIsAuthenticated(true)} />
+            )
+          } 
+        />
+        <Route 
+          path="/matrix/:id" 
+          element={
+            isAuthenticated ? (
+              <MatrixApp onSignOut={() => setIsAuthenticated(false)} />
+            ) : (
+              <Navigate to="/" replace />
+            )
+          } 
+        />
+        <Route 
+          path="/matrices" 
+          element={
+            isAuthenticated ? (
+              <MatrixApp onSignOut={() => setIsAuthenticated(false)} />
+            ) : (
+              <Navigate to="/" replace />
+            )
+          } 
+        />
+      </Routes>
+    </Router>
+  );
 }
 
 export default App;

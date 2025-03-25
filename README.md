@@ -10,7 +10,9 @@ A modern web application for creating and managing decision matrices. Built with
 - 📝 Add and evaluate options
 - 📈 Automatic score calculation
 - 🎨 Modern, responsive UI
-- 🔄 Real-time updates
+- �� Real-time updates
+- 🏠 Welcome page with quick actions
+- 🛣️ Intuitive navigation
 
 ## Tech Stack
 
@@ -20,6 +22,7 @@ A modern web application for creating and managing decision matrices. Built with
   - Bootstrap 5
   - React Bootstrap
   - React Icons
+  - React Router DOM
 
 - **Backend:**
   - Supabase (PostgreSQL)
@@ -32,6 +35,10 @@ A modern web application for creating and managing decision matrices. Built with
 src/
 ├── frontend/
 │   ├── components/     # React components
+│   │   ├── AuthPage.tsx
+│   │   ├── Home.tsx
+│   │   ├── MatrixApp.tsx
+│   │   └── ...
 │   ├── types/         # TypeScript type definitions
 │   └── utils/         # Frontend utility functions
 ├── backend/
@@ -65,7 +72,25 @@ src/
    npm run dev
    ```
 
-5. Open your browser and navigate to `http://localhost:5173`
+5. Open your browser and navigate to `http://localhost:5173` (or the port shown in the terminal)
+
+## Application Flow
+
+1. **Welcome Page** (`/`)
+   - Landing page for authenticated users
+   - Quick access to create new matrices or view existing ones
+   - Feature highlights and application overview
+
+2. **Authentication** (`/`)
+   - Sign up with email and username
+   - Sign in with email
+   - Automatic user creation on first sign-in
+
+3. **Matrix Management**
+   - Create new matrices (`/matrix`)
+   - View and manage existing matrices (`/matrices`)
+   - Define criteria and options
+   - Calculate and view results
 
 ## Database Schema
 
@@ -105,3 +130,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - [Supabase](https://supabase.com/)
 - [Bootstrap](https://getbootstrap.com/)
 - [React Bootstrap](https://react-bootstrap.github.io/)
+- [React Router](https://reactrouter.com/)
