@@ -171,9 +171,65 @@ export const matrixService = {
 
   async createEmptyMatrix(name: string, description?: string): Promise<DecisionMatrix | null> {
     try {
-      // Get the current user
+      // Get the current session
+      const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+      if (sessionError) {
+        console.error('Session error:', sessionError);
+        throw new Error('Failed to get session');
+      }
+
+      if (!session) {
+        // Try to refresh the session
+        const { data: { session: refreshedSession }, error: refreshError } = await supabase.auth.refreshSession();
+        if (refreshError || !refreshedSession) {
+          console.error('Failed to refresh session:', refreshError);
+          throw new Error('Authentication required');
+        }
+        // Use the refreshed session
+        const { data: { user }, error: userError } = await supabase.auth.getUser();
+        if (userError || !user) {
+          console.error('No user found after refresh:', userError);
+          throw new Error('User not found');
+        }
+
+        // Create the matrix with the refreshed session
+        const { data: matrix, error: matrixError } = await supabase
+          .from('matrices')
+          .insert([
+            {
+              name,
+              description,
+              owner_id: user.id,
+              active: true
+            }
+          ])
+          .select()
+          .single();
+
+        if (matrixError) throw matrixError;
+
+        // Create the user_matrices relationship
+        const { error: userMatrixError } = await supabase
+          .from('user_matrices')
+          .insert([
+            {
+              user_id: user.id,
+              matrix_id: matrix.id,
+              active: true
+            }
+          ]);
+
+        if (userMatrixError) throw userMatrixError;
+
+        return matrix;
+      }
+
+      // If we have a valid session, proceed with the original flow
       const { data: { user }, error: userError } = await supabase.auth.getUser();
-      if (userError || !user) throw userError;
+      if (userError || !user) {
+        console.error('No user found:', userError);
+        throw new Error('User not found');
+      }
 
       // Create the matrix
       const { data: matrix, error: matrixError } = await supabase
@@ -207,7 +263,7 @@ export const matrixService = {
       return matrix;
     } catch (error) {
       console.error('Error creating matrix:', error);
-      return null;
+      throw error;
     }
   }
 }; 

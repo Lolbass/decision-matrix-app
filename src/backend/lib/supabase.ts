@@ -13,5 +13,22 @@ export const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey, {
     persistSession: true,
     autoRefreshToken: true,
     storageKey: 'decision_matrix_auth',
+    storage: {
+      getItem: (key) => {
+        const value = localStorage.getItem(key);
+        console.log('Getting auth from storage:', key, value ? 'Found' : 'Not found');
+        return value;
+      },
+      setItem: (key, value) => {
+        console.log('Setting auth in storage:', key, value ? 'Value set' : 'No value');
+        localStorage.setItem(key, value);
+      },
+      removeItem: (key) => {
+        console.log('Removing auth from storage:', key);
+        localStorage.removeItem(key);
+      }
+    },
+    detectSessionInUrl: false,
+    flowType: 'pkce'
   }
 }) 

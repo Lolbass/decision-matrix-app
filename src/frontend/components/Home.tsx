@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Container, Row, Col, Button, Modal, Form } from 'react-bootstrap';
+import { Container, Row, Col, Button, Modal, Form, Alert } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { matrixService } from '../../backend/services/matrixService';
 
@@ -9,11 +9,13 @@ export const Home: React.FC = () => {
   const [matrixName, setMatrixName] = useState('');
   const [matrixDescription, setMatrixDescription] = useState('');
   const [isCreating, setIsCreating] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const handleCreateMatrix = async () => {
     if (!matrixName.trim()) return;
 
     setIsCreating(true);
+    setError(null);
     try {
       const matrix = await matrixService.createEmptyMatrix(matrixName, matrixDescription);
       if (matrix) {
@@ -21,11 +23,24 @@ export const Home: React.FC = () => {
       }
     } catch (error) {
       console.error('Error creating matrix:', error);
+      if (error instanceof Error) {
+        if (error.message === 'Authentication required') {
+          setError('Please sign in to create a matrix');
+          // Optionally redirect to login
+          // navigate('/login');
+        } else {
+          setError(error.message);
+        }
+      } else {
+        setError('An unexpected error occurred');
+      }
     } finally {
       setIsCreating(false);
-      setShowModal(false);
-      setMatrixName('');
-      setMatrixDescription('');
+      if (!error) {
+        setShowModal(false);
+        setMatrixName('');
+        setMatrixDescription('');
+      }
     }
   };
 
@@ -82,6 +97,11 @@ export const Home: React.FC = () => {
           <Modal.Title>Create New Matrix</Modal.Title>
         </Modal.Header>
         <Modal.Body>
+          {error && (
+            <Alert variant="danger" onClose={() => setError(null)} dismissible>
+              {error}
+            </Alert>
+          )}
           <Form>
             <Form.Group className="mb-3">
               <Form.Label>Matrix Name</Form.Label>
