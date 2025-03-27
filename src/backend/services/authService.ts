@@ -1,40 +1,69 @@
 import { supabase } from '../lib/supabase';
 import type { User } from '@supabase/supabase-js';
 
+// Session validation helper
+const validateSession = async (): Promise<boolean> => {
+  try {
+    const { data: { session }, error } = await supabase.auth.getSession();
+    if (error) {
+      console.error('Session validation error:', error.message);
+      return false;
+    }
+    return !!session;
+  } catch (err) {
+    console.error('Error validating session:', err);
+    return false;
+  }
+};
+
 export const authService = {
   async signUp(email: string, username: string, password: string) {
     try {
+      // Use email prefix as fallback username if none provided
+      const finalUsername = username || email.split('@')[0];
+      
       // Sign up with Supabase Auth
       const { data: authData, error: authError } = await supabase.auth.signUp({
         email,
         password,
         options: {
           data: {
-            username: username || email.split('@')[0], // Ensure username is set
+            username: finalUsername,
           },
+          emailRedirectTo: window.location.origin, // Add redirect URL for email confirmation
         },
       });
 
       if (authError) throw authError;
       if (!authData.user) throw new Error('No user data returned from signup');
 
-      // Manually create the user record instead of relying on the trigger
+      // Create the user record in the users table
       const { error: userError } = await supabase
         .from('users')
         .upsert([
           {
             id: authData.user.id,
             email: authData.user.email,
-            username: username || email.split('@')[0],
+            username: finalUsername,
             active: true,
           },
         ], { onConflict: 'id' });
 
       if (userError) {
-        console.error('Error creating user record:', userError);
-        throw new Error('Failed to create user record');
+        throw new Error(`Failed to create user record: ${userError.message}`);
       }
 
+      // Check if email confirmation is required
+      if (!authData.session) {
+        return {
+          ...authData,
+          emailConfirmationRequired: true
+        };
+      }
+
+      // Wait a moment for session establishment if we have a session
+      await new Promise(resolve => setTimeout(resolve, 100));
+      
       return authData;
     } catch (error) {
       console.error('Error in signUp:', error);
@@ -44,36 +73,26 @@ export const authService = {
 
   async signIn(email: string, password: string) {
     try {
-      console.log('Attempting to sign in...');
       const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
 
-      if (authError) {
-        console.error('Sign in error:', authError);
-        throw authError;
-      }
-
-      console.log('Sign in successful, checking session...');
+      if (authError) throw authError;
+      
+      // Wait a moment for the session to be properly established
+      await new Promise(resolve => setTimeout(resolve, 100));
       
       // Verify the session was created
       const { data: { session }, error: sessionError } = await supabase.auth.getSession();
-      if (sessionError) {
-        console.error('Session error:', sessionError);
-        throw sessionError;
-      }
+      if (sessionError) throw sessionError;
 
       if (!session) {
-        console.error('No session after sign in');
         throw new Error('Failed to create session');
       }
 
-      console.log('Session verified:', session.user?.email);
-
       // Check if user exists in the users table
       if (authData.user) {
-        console.log('Checking user record...');
         const { data: existingUser, error: userError } = await supabase
           .from('users')
           .select('*')
@@ -85,21 +104,24 @@ export const authService = {
         }
 
         // If user doesn't exist in the users table, create the record
+        // Use username from auth metadata if available, otherwise fallback to email prefix
         if (!existingUser) {
-          console.log('Creating user record...');
+          const userData = authData.user.user_metadata as { username?: string };
+          const username = userData.username || email.split('@')[0];
+          
           const { error: createError } = await supabase
             .from('users')
             .upsert([
               {
                 id: authData.user.id,
                 email: authData.user.email,
-                username: email.split('@')[0], // Use part of email as username
+                username,
                 active: true,
               },
             ], { onConflict: 'id' });
 
           if (createError) {
-            console.error('Error creating user record:', createError);
+            throw new Error(`Failed to create user record: ${createError.message}`);
           }
         }
       }
@@ -114,17 +136,89 @@ export const authService = {
   async signOut() {
     const { error } = await supabase.auth.signOut();
     if (error) throw error;
+    
+    // Clear any cached data to prevent auth issues on next login
+    localStorage.removeItem('decision_matrix_auth');
   },
 
   async getCurrentUser() {
-    const { data: { user }, error } = await supabase.auth.getUser();
-    if (error) throw error;
-    return user;
+    try {
+      const { data: { user }, error } = await supabase.auth.getUser();
+      
+      if (error) {
+        // If there's an auth error, attempt to recover the session
+        if (error.message.includes('session')) {
+          const sessionValid = await validateSession();
+          if (!sessionValid) {
+            // If session validation fails, try to refresh the session
+            const { data, error: refreshError } = await supabase.auth.refreshSession();
+            if (refreshError || !data.session) {
+              throw error; // If refresh fails, throw the original error
+            }
+            
+            // If refresh succeeds, try to get user again
+            const { data: refreshedData, error: getUserError } = await supabase.auth.getUser();
+            if (getUserError) throw getUserError;
+            return refreshedData.user;
+          }
+        }
+        throw error;
+      }
+      
+      return user;
+    } catch (error) {
+      console.error('Error getting current user:', error);
+      throw error;
+    }
   },
 
   onAuthStateChange(callback: (user: User | null) => void) {
     return supabase.auth.onAuthStateChange((event, session) => {
+      console.log('Auth state change event:', event);
       callback(session?.user ?? null);
     });
   },
+  
+  async refreshSession() {
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        // Return empty data if no session exists instead of trying to refresh
+        return { session: null, user: null };
+      }
+      
+      const { data, error } = await supabase.auth.refreshSession();
+      if (error) throw error;
+      return data;
+    } catch (error) {
+      // Only log errors that aren't related to missing session
+      if (error instanceof Error && !error.message.includes('Auth session missing')) {
+        console.error('Failed to refresh session:', error);
+      }
+      return { session: null, user: null };
+    }
+  },
+
+  // Check if there's a valid session
+  async hasValidSession() {
+    return validateSession();
+  },
+  
+  // Force confirm a user created without email verification
+  async manuallyConfirmUser(userId: string) {
+    try {
+      // This is an admin-level operation, only works with admin key
+      // For testing purposes only
+      const { error } = await supabase.auth.admin.updateUserById(
+        userId,
+        { email_confirmed: true }
+      );
+      
+      if (error) throw error;
+      return true;
+    } catch (error) {
+      console.error('Error manually confirming user:', error);
+      return false;
+    }
+  }
 }; 

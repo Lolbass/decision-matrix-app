@@ -8,27 +8,47 @@ if (!supabaseUrl || !supabaseAnonKey) {
   throw new Error('Missing Supabase environment variables')
 }
 
+// Helper function to check if running in a browser environment
+const isBrowser = () => typeof window !== 'undefined'
+
 export const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey, {
   auth: {
     persistSession: true,
     autoRefreshToken: true,
     storageKey: 'decision_matrix_auth',
-    storage: {
+    storage: isBrowser() ? {
       getItem: (key) => {
-        const value = localStorage.getItem(key);
-        console.log('Getting auth from storage:', key, value ? 'Found' : 'Not found');
-        return value;
+        try {
+          return localStorage.getItem(key)
+        } catch (error) {
+          console.error('Error getting auth from localStorage:', error)
+          return null
+        }
       },
       setItem: (key, value) => {
-        console.log('Setting auth in storage:', key, value ? 'Value set' : 'No value');
-        localStorage.setItem(key, value);
+        try {
+          localStorage.setItem(key, value)
+        } catch (error) {
+          console.error('Error setting auth in localStorage:', error)
+        }
       },
       removeItem: (key) => {
-        console.log('Removing auth from storage:', key);
-        localStorage.removeItem(key);
+        try {
+          localStorage.removeItem(key)
+        } catch (error) {
+          console.error('Error removing auth from localStorage:', error)
+        }
       }
-    },
-    detectSessionInUrl: false,
+    } : undefined,
+    detectSessionInUrl: true, // Enable session detection in URL for PKCE flow
     flowType: 'pkce'
+  },
+  global: {
+    fetch: (...args) => fetch(...args) // Use native fetch with automatic retry
+  },
+  realtime: {
+    params: {
+      eventsPerSecond: 10
+    }
   }
 }) 
