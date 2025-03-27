@@ -211,7 +211,7 @@ export const authService = {
       // For testing purposes only
       const { error } = await supabase.auth.admin.updateUserById(
         userId,
-        { email_confirmed: true }
+        { email_confirm: true }
       );
       
       if (error) throw error;
