@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { AuthPage } from './frontend/components/AuthPage';
 import { MatrixApp } from './frontend/components/MatrixApp';
 import { Home } from './frontend/components/Home';
+import { MatricesPage } from './frontend/components/MatricesPage';
 import { supabase } from './backend/lib/supabase';
 import { authService } from './backend/services/authService';
 
@@ -165,7 +166,7 @@ function App() {
           path="/matrices" 
           element={
             isAuthenticated ? (
-              <MatrixApp onSignOut={() => setIsAuthenticated(false)} />
+              <MatricesPage />
             ) : (
               <Navigate to="/" replace />
             )

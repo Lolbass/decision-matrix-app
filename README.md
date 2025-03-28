@@ -10,9 +10,12 @@ A modern web application for creating and managing decision matrices. Built with
 - 📝 Add and evaluate options
 - 📈 Automatic score calculation
 - 🎨 Modern, responsive UI
-- �� Real-time updates
+- ⚡ Real-time updates
 - 🏠 Welcome page with quick actions
 - 🛣️ Intuitive navigation
+- 👥 Matrix sharing and collaboration
+- 📋 Matrix listing and management
+- 🔒 Row-level security for data protection
 
 ## Tech Stack
 
@@ -38,12 +41,16 @@ src/
 │   │   ├── AuthPage.tsx
 │   │   ├── Home.tsx
 │   │   ├── MatrixApp.tsx
+│   │   ├── MatricesPage.tsx
 │   │   └── ...
 │   ├── types/         # TypeScript type definitions
 │   └── utils/         # Frontend utility functions
 ├── backend/
 │   ├── lib/           # Backend library code
 │   └── services/      # Backend services
+│       ├── matrixService.ts
+│       ├── userMatrixService.ts
+│       └── ...
 └── App.tsx            # Main application component
 ```
 
@@ -91,6 +98,13 @@ src/
    - View and manage existing matrices (`/matrices`)
    - Define criteria and options
    - Calculate and view results
+   - Share matrices with other users
+
+4. **Matrix Listing** (`/matrices`)
+   - View all your matrices in a table format
+   - Quick access to matrix details
+   - Create new matrices
+   - Sort and filter matrices
 
 ## Database Schema
 
@@ -101,7 +115,22 @@ The application uses the following main tables:
 - `criteria`: Evaluation criteria
 - `options`: Decision options
 - `option_criteria`: Option scores for each criterion
-- `user_matrices`: User-matrix relationships
+- `user_matrices`: User-matrix relationships for sharing and access control
+
+## Row Level Security (RLS)
+
+The application implements Row Level Security for data protection:
+
+1. **Matrices Table**
+   - Users can only access their own matrices
+   - Matrix owners can share their matrices with other users
+
+2. **User Matrices Table**
+   - Users can only view and modify their own matrix relationships
+   - Access is controlled through RLS policies
+
+3. **Criteria and Options Tables**
+   - Access is restricted to users with access to the parent matrix
 
 ## Authentication
 
@@ -110,6 +139,7 @@ The application uses a simplified authentication system:
 - Sign in with email
 - No password management required
 - Automatic user creation on first sign-in
+- Secure session management
 
 ## Contributing
 
