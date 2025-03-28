@@ -1,9 +1,26 @@
 -- Enable UUID extension
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
+-- Drop triggers first if they exist
+DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users;
+DROP TRIGGER IF EXISTS handle_users_updated_at ON public.users;
+DROP TRIGGER IF EXISTS handle_matrices_updated_at ON public.matrices;
+DROP TRIGGER IF EXISTS handle_criteria_updated_at ON public.criteria;
+DROP TRIGGER IF EXISTS handle_options_updated_at ON public.options;
+DROP TRIGGER IF EXISTS handle_option_criteria_updated_at ON public.option_criteria;
+DROP TRIGGER IF EXISTS handle_user_matrices_updated_at ON public.user_matrices;
+
+-- Drop tables CASCADE to eliminate foreign key constraints if they exist
+DROP TABLE IF EXISTS public.user_matrices CASCADE;
+DROP TABLE IF EXISTS public.option_criteria CASCADE;
+DROP TABLE IF EXISTS public.options CASCADE;
+DROP TABLE IF EXISTS public.criteria CASCADE;
+DROP TABLE IF EXISTS public.matrices CASCADE;
+DROP TABLE IF EXISTS public.users CASCADE;
+
 -- Create users table
 CREATE TABLE IF NOT EXISTS public.users (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY, 
     username TEXT NOT NULL,
     email TEXT NOT NULL UNIQUE,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc'::text, NOW()) NOT NULL,
@@ -116,15 +133,14 @@ ALTER TABLE public.options ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.option_criteria ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.user_matrices ENABLE ROW LEVEL SECURITY;
 
--- Create policies
-CREATE POLICY "Users can view their own data"
-    ON public.users FOR SELECT
-    USING (true);
+-- Create policies with proper permissions
+-- Users table policies
+CREATE POLICY "Allow all operations for authenticated users"
+    ON public.users
+    USING (true)
+    WITH CHECK (true);
 
-CREATE POLICY "Users can update their own data"
-    ON public.users FOR UPDATE
-    USING (true);
-
+-- Matrix policies
 CREATE POLICY "Users can view their own matrices"
     ON public.matrices FOR SELECT
     USING (
