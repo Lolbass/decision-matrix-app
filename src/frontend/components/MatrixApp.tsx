@@ -4,7 +4,7 @@ import { CriteriaManager } from './CriteriaManager';
 import { OptionsManager } from './OptionsManager';
 import { EditableTitle } from './EditableTitle';
 import { calculateAllScores } from '../utils/scoreCalculator';
-import { DecisionMatrix, Criterion, Option } from '../types/decisionMatrix';
+import { DecisionMatrix, Criterion, Option } from '../types/matrix.types';
 import { matrixService } from '../../backend/services/matrixService';
 import { authService } from '../../backend/services/authService';
 import { Navigation } from './Navigation';
@@ -35,6 +35,9 @@ export function MatrixApp({ onSignOut }: MatrixAppProps) {
 
   const [scores, setScores] = useState<Record<string, number>>({});
   const [showInvalidWeights, setShowInvalidWeights] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  const [saveError, setSaveError] = useState<string | null>(null);
+  const [saveSuccess, setSaveSuccess] = useState(false);
 
   useEffect(() => {
     // Load user's matrices
@@ -51,6 +54,7 @@ export function MatrixApp({ onSignOut }: MatrixAppProps) {
       ...updates,
       updated_at: new Date(),
     }));
+    setSaveSuccess(false);
   };
 
   const handleTitleSave = (title: string, description?: string) => {
@@ -76,6 +80,20 @@ export function MatrixApp({ onSignOut }: MatrixAppProps) {
     setScores(results);
   };
 
+  const handleSave = async () => {
+    try {
+      setIsSaving(true);
+      setSaveError(null);
+      await matrixService.saveMatrix(matrix);
+      setSaveSuccess(true);
+    } catch (error) {
+      console.error('Error saving matrix:', error);
+      setSaveError(error instanceof Error ? error.message : 'Failed to save matrix');
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
   const handleSignOut = async () => {
     try {
       await authService.signOut();
@@ -90,11 +108,32 @@ export function MatrixApp({ onSignOut }: MatrixAppProps) {
       <Navigation onSignOut={handleSignOut} />
       <Row className="justify-content-center">
         <Col lg={10}>
-          <EditableTitle
-            title={matrix.name}
-            description={matrix.description}
-            onSave={handleTitleSave}
-          />
+          <div className="d-flex justify-content-between align-items-center mb-4">
+            <EditableTitle
+              title={matrix.name}
+              description={matrix.description}
+              onSave={handleTitleSave}
+            />
+            <Button 
+              variant="primary" 
+              onClick={handleSave}
+              disabled={isSaving}
+            >
+              {isSaving ? 'Saving...' : 'Save Matrix'}
+            </Button>
+          </div>
+
+          {saveError && (
+            <Alert variant="danger" className="mb-4" onClose={() => setSaveError(null)} dismissible>
+              {saveError}
+            </Alert>
+          )}
+
+          {saveSuccess && (
+            <Alert variant="success" className="mb-4" onClose={() => setSaveSuccess(false)} dismissible>
+              Matrix saved successfully!
+            </Alert>
+          )}
 
           {showInvalidWeights && (
             <Alert variant="warning" className="mb-4">

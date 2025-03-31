@@ -2,6 +2,8 @@ import { supabase } from '../lib/supabase';
 import type { Database } from '../types/database.types';
 import type { DecisionMatrix } from '../../frontend/types/matrix.types';
 import { userMatrixService } from './userMatrixService';
+import { criteriaService } from './criteriaService';
+import { optionsService } from './optionsService';
 
 type MatrixInsert = Database['public']['Tables']['matrices']['Insert'];
 type Criterion = Database['public']['Tables']['criteria']['Row'];
@@ -258,6 +260,32 @@ export const matrixService = {
       return matrix;
     } catch (error) {
       console.error('Error creating matrix:', error);
+      throw error;
+    }
+  },
+
+  async saveMatrix(matrix: DecisionMatrix) {
+    try {
+      // Save matrix details
+      const { data: matrixData, error: matrixError } = await supabase
+        .from('matrices')
+        .upsert({
+          id: matrix.id,
+          name: matrix.name,
+          description: matrix.description,
+          owner_id: matrix.ownerId,
+          updated_at: matrix.updated_at,
+        }, { onConflict: 'id' });
+
+      if (matrixError) throw matrixError;
+
+      // Save related data using their respective services
+      await criteriaService.saveCriteria(matrix.id, matrix.criteria);
+      await optionsService.saveOptions(matrix.id, matrix.options);
+
+      return matrixData;
+    } catch (error) {
+      console.error('Error saving matrix:', error);
       throw error;
     }
   }
