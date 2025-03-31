@@ -1,6 +1,7 @@
 import { supabase } from '../lib/supabase';
 import type { Database } from '../types/database.types';
 import type { DecisionMatrix } from '../../frontend/types/matrix.types';
+import { userMatrixService } from './userMatrixService';
 
 type MatrixInsert = Database['public']['Tables']['matrices']['Insert'];
 type Criterion = Database['public']['Tables']['criteria']['Row'];
@@ -208,18 +209,15 @@ export const matrixService = {
 
         if (matrixError) throw matrixError;
 
-        // Create the user_matrices relationship
-        const { error: userMatrixError } = await supabase
-          .from('user_matrices')
-          .insert([
-            {
-              user_id: user.id,
-              matrix_id: matrix.id,
-              active: true
-            }
-          ]);
-
-        if (userMatrixError) throw userMatrixError;
+        // Create the user_matrices relationship using userMatrixService
+        try {
+          await userMatrixService.addUserToMatrix(user.id, matrix.id);
+        } catch (userMatrixError) {
+          console.error('Error adding user to matrix:', userMatrixError);
+          // If we fail to create the user_matrix relationship, delete the matrix to avoid orphaned records
+          await supabase.from('matrices').delete().eq('id', matrix.id);
+          throw new Error('Failed to create user-matrix relationship');
+        }
 
         return matrix;
       }
@@ -247,18 +245,15 @@ export const matrixService = {
 
       if (matrixError) throw matrixError;
 
-      // Create the user_matrices relationship
-      const { error: userMatrixError } = await supabase
-        .from('user_matrices')
-        .insert([
-          {
-            user_id: user.id,
-            matrix_id: matrix.id,
-            active: true
-          }
-        ]);
-
-      if (userMatrixError) throw userMatrixError;
+      // Create the user_matrices relationship using userMatrixService
+      try {
+        await userMatrixService.addUserToMatrix(user.id, matrix.id);
+      } catch (userMatrixError) {
+        console.error('Error adding user to matrix:', userMatrixError);
+        // If we fail to create the user_matrix relationship, delete the matrix to avoid orphaned records
+        await supabase.from('matrices').delete().eq('id', matrix.id);
+        throw new Error('Failed to create user-matrix relationship');
+      }
 
       return matrix;
     } catch (error) {
