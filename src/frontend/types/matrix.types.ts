@@ -23,7 +23,7 @@ export interface DecisionMatrix {
   criteria: Criterion[];
   options: Option[];
   ownerId: string;
-  createdAt: Date;
-  updatedAt: Date;
+  created_at: Date;
+  updated_at: Date;
   active?: boolean;
 } 

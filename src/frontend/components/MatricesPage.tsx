@@ -16,6 +16,7 @@ export const MatricesPage: React.FC = () => {
         setLoading(true);
         setError(null);
         const data = await userMatrixService.getUserMatrices();
+        console.log('Matrices:', data);
         setMatrices(data);
       } catch (err) {
         console.error('Error fetching matrices:', err);
@@ -82,8 +83,8 @@ export const MatricesPage: React.FC = () => {
               >
                 <td className="fw-bold">{matrix.name}</td>
                 <td>{matrix.description || '—'}</td>
-                <td>{new Date(matrix.createdAt).toLocaleDateString()}</td>
-                <td>{new Date(matrix.updatedAt).toLocaleDateString()}</td>
+                <td>{new Date(matrix.created_at).toLocaleDateString()}</td>
+                <td>{new Date(matrix.updated_at).toLocaleDateString()}</td>
                 <td>{matrix.criteria.length}</td>
                 <td>{matrix.options.length}</td>
                 <td>
