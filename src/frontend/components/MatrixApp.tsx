@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react';
-import { Container, Row, Col, Card, Form, Button, Alert } from 'react-bootstrap';
+import { Container, Row, Col, Card, Button, Alert } from 'react-bootstrap';
 import { CriteriaManager } from './CriteriaManager';
 import { OptionsManager } from './OptionsManager';
+import { EditableTitle } from './EditableTitle';
 import { calculateAllScores } from '../utils/scoreCalculator';
 import { DecisionMatrix, Criterion, Option } from '../types/decisionMatrix';
 import { matrixService } from '../../backend/services/matrixService';
 import { authService } from '../../backend/services/authService';
+import { Navigation } from './Navigation';
 
 interface MatrixAppProps {
   onSignOut: () => void;
@@ -51,6 +53,10 @@ export function MatrixApp({ onSignOut }: MatrixAppProps) {
     }));
   };
 
+  const handleTitleSave = (title: string, description?: string) => {
+    handleMatrixChange({ name: title, description });
+  };
+
   const handleCriteriaChange = (criteria: Criterion[]) => {
     const totalWeight = criteria.reduce((sum, criterion) => sum + criterion.weight, 0);
     if (Math.abs(totalWeight - 1) > 0.01) {
@@ -80,38 +86,15 @@ export function MatrixApp({ onSignOut }: MatrixAppProps) {
   };
 
   return (
-    <Container fluid className="py-5 bg-light">
+    <Container fluid className="py-5">
+      <Navigation onSignOut={handleSignOut} />
       <Row className="justify-content-center">
         <Col lg={10}>
-          <div className="d-flex justify-content-between align-items-center mb-4">
-            <h2>Decision Matrix</h2>
-            <Button variant="outline-danger" onClick={handleSignOut}>
-              Sign Out
-            </Button>
-          </div>
-
-          <Card className="mb-4 shadow-sm">
-            <Card.Body>
-              <Form.Group className="mb-3">
-                <Form.Label>Decision Matrix Name</Form.Label>
-                <Form.Control
-                  type="text"
-                  value={matrix.name}
-                  onChange={(e) => handleMatrixChange({ name: e.target.value })}
-                  placeholder="Enter matrix name"
-                />
-              </Form.Group>
-              <Form.Group>
-                <Form.Label>Description</Form.Label>
-                <Form.Control
-                  as="textarea"
-                  value={matrix.description}
-                  onChange={(e) => handleMatrixChange({ description: e.target.value })}
-                  placeholder="Enter description"
-                />
-              </Form.Group>
-            </Card.Body>
-          </Card>
+          <EditableTitle
+            title={matrix.name}
+            description={matrix.description}
+            onSave={handleTitleSave}
+          />
 
           {showInvalidWeights && (
             <Alert variant="warning" className="mb-4">
@@ -144,7 +127,7 @@ export function MatrixApp({ onSignOut }: MatrixAppProps) {
           </Row>
 
           <Card className="shadow-sm mt-4">
-            <Card.Header className="bg-white">
+            <Card.Header>
               <div className="d-flex justify-content-between align-items-center">
                 <h5 className="mb-0">Results</h5>
                 <Button variant="primary" onClick={calculateResults}>
