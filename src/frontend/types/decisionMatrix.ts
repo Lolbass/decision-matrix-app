@@ -19,8 +19,9 @@ export interface DecisionMatrix {
   ownerId: string;
   criteria: Criterion[];
   options: Option[];
-  createdAt: Date;
-  updatedAt: Date;
+  created_at: Date;
+  updated_at: Date;
+  active?: boolean;
 }
 
 export type ScoringScale = 1 | 2 | 3 | 4 | 5; 

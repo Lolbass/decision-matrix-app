@@ -27,8 +27,8 @@ export function MatrixApp({ onSignOut }: MatrixAppProps) {
       { id: '2', name: 'Option B', scores: { '1': 2, '2': 5, '3': 3 } },
       { id: '3', name: 'Option C', scores: { '1': 5, '2': 2, '3': 4 } },
     ],
-    createdAt: new Date(),
-    updatedAt: new Date(),
+    created_at: new Date(),
+    updated_at: new Date(),
   });
 
   const [scores, setScores] = useState<Record<string, number>>({});
@@ -47,7 +47,7 @@ export function MatrixApp({ onSignOut }: MatrixAppProps) {
     setMatrix(prev => ({ 
       ...prev, 
       ...updates,
-      updatedAt: new Date(),
+      updated_at: new Date(),
     }));
   };
 
