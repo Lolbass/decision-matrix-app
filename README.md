@@ -1,6 +1,6 @@
 # Decision Matrix App
 
-A modern web application for creating and managing decision matrices. Built with React, TypeScript, and Supabase.
+A modern web application for creating and managing decision matrices. Built with React, TypeScript, and Supabase. Features a sleek dark theme and intuitive user interface.
 
 ## Features
 
@@ -8,13 +8,14 @@ A modern web application for creating and managing decision matrices. Built with
 - 📊 Create and manage decision matrices
 - ⚖️ Define criteria with weights
 - 📝 Add and evaluate options
-- 📈 Automatic score calculation
-- 🎨 Modern, responsive UI
+- 📈 Automatic score calculation with visual score bars
+- 🎨 Modern, responsive UI with dark theme
+- 🔍 Advanced search and sorting capabilities
 - ⚡ Real-time updates
 - 🏠 Welcome page with quick actions
 - 🛣️ Intuitive navigation
 - 👥 Matrix sharing and collaboration
-- 📋 Matrix listing and management
+- 📋 Modern card-based matrix management
 - 🔒 Row-level security for data protection
 
 ## Tech Stack
@@ -24,7 +25,7 @@ A modern web application for creating and managing decision matrices. Built with
   - TypeScript
   - Bootstrap 5
   - React Bootstrap
-  - React Icons
+  - Heroicons
   - React Router DOM
 
 - **Backend:**
@@ -101,10 +102,12 @@ src/
    - Share matrices with other users
 
 4. **Matrix Listing** (`/matrices`)
-   - View all your matrices in a table format
+   - View all your matrices in a modern card-based layout
+   - Search matrices by name or description
+   - Sort matrices by date created, modified, or alphabetically
    - Quick access to matrix details
    - Create new matrices
-   - Sort and filter matrices
+   - Delete matrices you no longer need
 
 ## Database Schema
 
@@ -161,3 +164,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - [Bootstrap](https://getbootstrap.com/)
 - [React Bootstrap](https://react-bootstrap.github.io/)
 - [React Router](https://reactrouter.com/)
+- [Heroicons](https://heroicons.com/)
