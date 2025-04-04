@@ -19,17 +19,23 @@
 }
 
 /* Dark theme variables */
-[data-theme="dark"] {
-  --bg-primary: #212529;
-  --bg-secondary: #343a40;
+[data-bs-theme="dark"] {
+  --bg-primary: #121212;
+  --bg-secondary: #1e1e1e;
   --text-primary: #f8f9fa;
   --text-secondary: #adb5bd;
-  --border-color: #495057;
-  --scrollbar-track: #343a40;
-  --scrollbar-thumb: #6c757d;
-  --scrollbar-thumb-hover: #adb5bd;
-  --table-bg: #b2c5d7;
-  --table-hover-bg: #3f474e;
+  --border-color: #333333;
+  --scrollbar-track: #1e1e1e;
+  --scrollbar-thumb: #4d4d4d;
+  --scrollbar-thumb-hover: #666666;
+  --table-bg: #262626;
+  --table-hover-bg: #333333;
+  
+  /* Accent colors */
+  --accent-primary: #3ECF8E;
+  --accent-secondary: #FF7D4D;
+  --accent-warning: #FFB224;
+  --accent-info: #4F8EFF;
 }
 
 body {
@@ -73,45 +79,80 @@ input[type="number"] {
 }
 
 /* Dark mode specific styles */
-[data-theme="dark"] .card {
+[data-bs-theme="dark"] .card {
   background-color: var(--bg-secondary);
   border-color: var(--border-color);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
 }
 
-[data-theme="dark"] .form-control {
-  background-color: var(--bg-secondary);
-  border-color: var(--border-color);
-  color: var(--text-primary);
-}
-
-[data-theme="dark"] .form-control:focus {
+[data-bs-theme="dark"] .form-control {
   background-color: var(--bg-secondary);
   border-color: var(--border-color);
   color: var(--text-primary);
 }
 
-[data-theme="dark"] .table {
+[data-bs-theme="dark"] .form-control:focus {
+  background-color: var(--bg-secondary);
+  border-color: var(--accent-primary);
+  color: var(--text-primary);
+  box-shadow: 0 0 0 2px rgba(62, 207, 142, 0.2);
+}
+
+[data-bs-theme="dark"] .table {
   color: var(--text-primary);
   background-color: var(--table-bg);
 }
 
-[data-theme="dark"] .table td,
-[data-theme="dark"] .table th {
+[data-bs-theme="dark"] .table td,
+[data-bs-theme="dark"] .table th {
   border-color: var(--border-color);
   background-color: var(--table-bg);
 }
 
-[data-theme="dark"] .table-hover tbody tr:hover {
+[data-bs-theme="dark"] .table-hover tbody tr:hover {
   background-color: var(--table-hover-bg);
 }
 
-[data-theme="dark"] .modal-content {
+[data-bs-theme="dark"] .modal-content {
   background-color: var(--bg-primary);
   color: var(--text-primary);
   border-color: var(--border-color);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
 }
 
-[data-theme="dark"] .modal-header,
-[data-theme="dark"] .modal-footer {
+[data-bs-theme="dark"] .modal-header,
+[data-bs-theme="dark"] .modal-footer {
   border-color: var(--border-color);
+}
+
+/* Button styling */
+[data-bs-theme="dark"] .btn-primary {
+  background-color: var(--accent-primary);
+  border-color: var(--accent-primary);
+}
+
+[data-bs-theme="dark"] .btn-primary:hover {
+  background-color: #2cb876;
+  border-color: #2cb876;
+}
+
+[data-bs-theme="dark"] .btn-outline-primary {
+  color: var(--accent-primary);
+  border-color: var(--accent-primary);
+}
+
+[data-bs-theme="dark"] .btn-outline-primary:hover {
+  background-color: var(--accent-primary);
+  color: white;
+}
+
+/* Navbar styling */
+[data-bs-theme="dark"] .navbar {
+  background-color: var(--bg-primary);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Badge styling */
+[data-bs-theme="dark"] .badge {
+  background-color: var(--accent-secondary);
 }

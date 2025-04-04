@@ -1,24 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import { Button } from 'react-bootstrap';
+import React, { useEffect } from 'react';
 
 export const ThemeToggle: React.FC = () => {
-  const [theme, setTheme] = useState<'light' | 'dark'>(() => {
-    const savedTheme = localStorage.getItem('theme');
-    return (savedTheme as 'light' | 'dark') || 
-      (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-  });
-
   useEffect(() => {
-    document.documentElement.setAttribute('data-bs-theme', theme);
-    localStorage.setItem('theme', theme);
-  }, [theme]);
+    document.documentElement.setAttribute('data-bs-theme', 'dark');
+    localStorage.setItem('theme', 'dark');
+  }, []);
 
-  return (
-    <Button
-      variant="outline-secondary"
-      onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
-    >
-      {theme === 'light' ? '🌙' : '☀️'}
-    </Button>
-  );
+  // Empty component - no toggle button rendered
+  return null;
 }; 

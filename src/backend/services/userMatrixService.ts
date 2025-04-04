@@ -1,6 +1,7 @@
 import { supabase } from '../lib/supabase';
 import type { Database } from '../types/database.types';
 import type { DecisionMatrix } from '../../frontend/types/matrix.types';
+import { matrixService } from './matrixService';
 
 type UserMatrix = Database['public']['Tables']['user_matrices']['Row'];
 
@@ -122,5 +123,30 @@ export const userMatrixService = {
     }
     
     return !!data;
+  },
+
+  async deleteUserMatrix(matrixId: string): Promise<void> {
+    try {
+      // Get the current user
+      const { data: { user }, error: userError } = await supabase.auth.getUser();
+      if (userError || !user) {
+        throw new Error('Authentication required');
+      }
+
+      // First, mark user_matrix relationship as inactive
+      const { error: removeError } = await supabase
+        .from('user_matrices')
+        .update({ active: false })
+        .eq('user_id', user.id)
+        .eq('matrix_id', matrixId);
+
+      if (removeError) throw removeError;
+
+      // Then, mark the matrix itself as inactive using matrixService
+      await matrixService.deleteMatrix(matrixId);
+    } catch (error) {
+      console.error('Error deleting matrix:', error);
+      throw error;
+    }
   }
 }; 
