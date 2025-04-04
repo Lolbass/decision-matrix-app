@@ -1,13 +1,13 @@
 import { supabase } from '../lib/supabase';
 import type { Database } from '../types/database.types';
-import type { DecisionMatrix } from '../../frontend/types/matrix.types';
+import type { DecisionMatrix } from '../../shared/types/matrix.types';
 import { userMatrixService } from './userMatrixService';
 import { criteriaService } from './criteriaService';
 import { optionsService } from './optionsService';
 
 type MatrixInsert = Database['public']['Tables']['matrices']['Insert'];
-type Criterion = Database['public']['Tables']['criteria']['Row'];
-type Option = Database['public']['Tables']['options']['Row'];
+type OptionRow = Database['public']['Tables']['options']['Row'];
+type OptionCriteriaRow = Database['public']['Tables']['option_criteria']['Row'];
 
 export const matrixService = {
   async getMatrices(): Promise<DecisionMatrix[]> {
@@ -52,6 +52,18 @@ export const matrixService = {
       .single();
 
     if (error) throw error;
+
+    // Transform the data to match the frontend format
+    if (data) {
+      data.options = data.options.map((option: OptionRow & { scores: OptionCriteriaRow[] }) => ({
+        ...option,
+        scores: option.scores.reduce((acc: Record<string, number>, score: OptionCriteriaRow) => {
+          acc[score.criterion_id] = score.score;
+          return acc;
+        }, {})
+      }));
+    }
+
     return data;
   },
 
@@ -85,91 +97,6 @@ export const matrixService = {
       .eq('id', id);
 
     if (error) throw error;
-  },
-
-  async addCriterion(matrixId: string, criterion: Omit<Criterion, 'id' | 'matrix_id' | 'created_at' | 'updated_at'>) {
-    const { data, error } = await supabase
-      .from('criteria')
-      .insert({
-        ...criterion,
-        matrix_id: matrixId,
-      })
-      .select()
-      .single();
-
-    if (error) throw error;
-    return data;
-  },
-
-  async updateCriterion(id: string, updates: Partial<Criterion>) {
-    const { data, error } = await supabase
-      .from('criteria')
-      .update(updates)
-      .eq('id', id)
-      .select()
-      .single();
-
-    if (error) throw error;
-    return data;
-  },
-
-  async deleteCriterion(id: string) {
-    const { error } = await supabase
-      .from('criteria')
-      .update({ active: false })
-      .eq('id', id);
-
-    if (error) throw error;
-  },
-
-  async addOption(matrixId: string, option: Omit<Option, 'id' | 'matrix_id' | 'created_at' | 'updated_at'>) {
-    const { data, error } = await supabase
-      .from('options')
-      .insert({
-        ...option,
-        matrix_id: matrixId,
-      })
-      .select()
-      .single();
-
-    if (error) throw error;
-    return data;
-  },
-
-  async updateOption(id: string, updates: Partial<Option>) {
-    const { data, error } = await supabase
-      .from('options')
-      .update(updates)
-      .eq('id', id)
-      .select()
-      .single();
-
-    if (error) throw error;
-    return data;
-  },
-
-  async deleteOption(id: string) {
-    const { error } = await supabase
-      .from('options')
-      .update({ active: false })
-      .eq('id', id);
-
-    if (error) throw error;
-  },
-
-  async updateScore(optionId: string, criterionId: string, score: number) {
-    const { data, error } = await supabase
-      .from('option_criteria')
-      .upsert({
-        option_id: optionId,
-        criterion_id: criterionId,
-        score,
-      })
-      .select()
-      .single();
-
-    if (error) throw error;
-    return data;
   },
 
   async createEmptyMatrix(name: string, description?: string): Promise<DecisionMatrix | null> {
@@ -266,6 +193,15 @@ export const matrixService = {
 
   async saveMatrix(matrix: DecisionMatrix) {
     try {
+      // Get the current user
+      const { data: { user }, error: userError } = await supabase.auth.getUser();
+      if (userError || !user) {
+        console.error('User not authenticated:', userError);
+        throw new Error('Authentication required');
+      }
+
+      console.log('Saving matrix for user:', user.id);
+
       // Save matrix details
       const { data: matrixData, error: matrixError } = await supabase
         .from('matrices')
@@ -273,14 +209,19 @@ export const matrixService = {
           id: matrix.id,
           name: matrix.name,
           description: matrix.description,
-          owner_id: matrix.ownerId,
+          owner_id: user.id,
           updated_at: matrix.updated_at,
         }, { onConflict: 'id' });
 
-      if (matrixError) throw matrixError;
+      if (matrixError) {
+        console.error('Matrix save error:', matrixError);
+        throw matrixError;
+      }
 
-      // Save related data using their respective services
+      // Save criteria using criteriaService
       await criteriaService.saveCriteria(matrix.id, matrix.criteria);
+
+      // Save options using optionsService
       await optionsService.saveOptions(matrix.id, matrix.options);
 
       return matrixData;
