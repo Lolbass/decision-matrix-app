@@ -1,7 +1,7 @@
 import React from 'react';
 import { Navbar, Container, Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
-import { ThemeToggle } from './ThemeToggle';
+import { ThemeToggle } from './ThemeToggle.tsx';
 
 interface NavigationProps {
   onSignOut?: () => void;
