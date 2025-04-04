@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { Option, Criterion, ScoringScale } from '../types/decisionMatrix';
 import { PlusIcon, TrashIcon } from '@heroicons/react/24/outline';
-import { Card, Form, Button, Table, Modal } from 'react-bootstrap';
+import { Form, Button, Table, Modal } from 'react-bootstrap';
+import './OptionsManager.css';
 
 interface OptionsManagerProps {
   options: Option[];
@@ -25,9 +26,9 @@ export function OptionsManager({ options, criteria, onUpdate }: OptionsManagerPr
       name: newOption.name,
       description: newOption.description,
       scores: criteria.reduce((acc, criterion) => {
-        acc[criterion.id] = 0;
+        acc[criterion.id] = 0 as ScoringScale;
         return acc;
-      }, {} as Record<string, number>),
+      }, {} as Record<string, ScoringScale>),
     };
 
     onUpdate([...options, option]);
@@ -53,79 +54,76 @@ export function OptionsManager({ options, criteria, onUpdate }: OptionsManagerPr
   };
 
   return (
-    <div className="space-y-4">
-      <div className="d-flex justify-content-between align-items-center mb-4">
-        <h5 className="mb-0">Options</h5>
+    <div className="options-manager">
+      <div className="header-actions">
+        <h5 className="header-title">Options</h5>
         <Button
-          variant="primary"
+          variant="success"
+          size="sm"
           onClick={() => setShowModal(true)}
-          className="d-flex align-items-center justify-content-center"
+          className="add-button"
         >
-          <PlusIcon className="h-5 w-5" />
-          +
+          <PlusIcon className="icon-sm" />
+          Add Option
         </Button>
       </div>
 
-      <Card>
-        <Card.Body className="p-0">
-          <div className="table-responsive">
-            <Table hover className="mb-0">
-              <thead className="bg-light">
-                <tr>
-                  <th>Option</th>
-                  {criteria.map(criterion => (
-                    <th key={criterion.id}>{criterion.name}</th>
-                  ))}
-                  <th className="text-center">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {options.map(option => (
-                  <tr key={option.id}>
-                    <td>
-                      <div>
-                        <div className="fw-medium">{option.name}</div>
-                        {option.description && (
-                          <div className="text-muted small">{option.description}</div>
-                        )}
-                      </div>
-                    </td>
-                    {criteria.map(criterion => (
-                      <td key={criterion.id}>
-                        <Form.Select
-                          size="sm"
-                          value={option.scores[criterion.id] || 0}
-                          onChange={(e) => handleScoreChange(option.id, criterion.id, Number(e.target.value) as ScoringScale)}
-                        >
-                          <option value={0}>Not Rated</option>
-                          {[1, 2, 3, 4, 5].map(score => (
-                            <option key={score} value={score}>
-                              {score}
-                            </option>
-                          ))}
-                        </Form.Select>
-                      </td>
-                    ))}
-                    <td className="text-center">
-                      <Button
-                        variant="outline-secondary"
-                        size="sm"
-                        onClick={() => handleDeleteOption(option.id)}
-                        className="d-flex align-items-right justify-content-right"
-                      >
-                        <TrashIcon className="h-4 w-4" />
-                        -
-                      </Button>
-                    </td>
-                  </tr>
+      <div className="table-container">
+        <Table hover className="custom-table">
+          <thead>
+            <tr>
+              <th>Option</th>
+              {criteria.map(criterion => (
+                <th key={criterion.id}>{criterion.name}</th>
+              ))}
+              <th className="text-center">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {options.map(option => (
+              <tr key={option.id}>
+                <td>
+                  <div className="option-cell">
+                    <div className="option-name">{option.name}</div>
+                    {option.description && (
+                      <div className="option-description">{option.description}</div>
+                    )}
+                  </div>
+                </td>
+                {criteria.map(criterion => (
+                  <td key={criterion.id}>
+                    <Form.Select
+                      size="sm"
+                      value={option.scores[criterion.id] || 0}
+                      onChange={(e) => handleScoreChange(option.id, criterion.id, Number(e.target.value) as ScoringScale)}
+                      className="score-select"
+                    >
+                      <option value={0}>Not Rated</option>
+                      {[1, 2, 3, 4, 5].map(score => (
+                        <option key={score} value={score}>
+                          {score}
+                        </option>
+                      ))}
+                    </Form.Select>
+                  </td>
                 ))}
-              </tbody>
-            </Table>
-          </div>
-        </Card.Body>
-      </Card>
+                <td className="text-center">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => handleDeleteOption(option.id)}
+                    className="delete-button"
+                  >
+                    <TrashIcon className="icon-sm" />
+                  </Button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+      </div>
 
-      <Modal show={showModal} onHide={handleCloseModal} centered>
+      <Modal show={showModal} onHide={handleCloseModal} centered className="custom-modal">
         <Modal.Header closeButton>
           <Modal.Title>Add New Option</Modal.Title>
         </Modal.Header>
@@ -138,6 +136,7 @@ export function OptionsManager({ options, criteria, onUpdate }: OptionsManagerPr
               onChange={(e) => setNewOption({ ...newOption, name: e.target.value })}
               placeholder="Enter option name"
               autoFocus
+              className="custom-input"
             />
           </Form.Group>
           <Form.Group>
@@ -148,17 +147,19 @@ export function OptionsManager({ options, criteria, onUpdate }: OptionsManagerPr
               onChange={(e) => setNewOption({ ...newOption, description: e.target.value })}
               placeholder="Enter description"
               rows={2}
+              className="custom-input"
             />
           </Form.Group>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleCloseModal}>
+          <Button variant="secondary" onClick={handleCloseModal} className="cancel-button">
             Cancel
           </Button>
           <Button
-            variant="primary"
+            variant="success"
             onClick={handleAddOption}
             disabled={!newOption.name}
+            className="confirm-button"
           >
             Add Option
           </Button>

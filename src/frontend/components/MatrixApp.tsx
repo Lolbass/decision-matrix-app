@@ -130,7 +130,7 @@ export function MatrixApp({ onSignOut }: MatrixAppProps) {
   };
 
   return (
-    <Container fluid className="py-5 bg-light min-vh-100">
+    <Container fluid className="py-5 min-vh-100">
       <Navigation onSignOut={handleSignOut} />
       <Row className="justify-content-center g-4">
         <Col lg={10}>
@@ -189,7 +189,7 @@ export function MatrixApp({ onSignOut }: MatrixAppProps) {
               <Row className="g-4">
                 <Col xs={12}>
                   <Card className="shadow-sm h-100">
-                    <Card.Header className="bg-white py-3">
+                    <Card.Header className="py-3">
                       <h5 className="mb-0">Criteria</h5>
                     </Card.Header>
                     <Card.Body>
@@ -202,7 +202,7 @@ export function MatrixApp({ onSignOut }: MatrixAppProps) {
                 </Col>
                 <Col xs={12}>
                   <Card className="shadow-sm h-100">
-                    <Card.Header className="bg-white py-3">
+                    <Card.Header className="py-3">
                       <h5 className="mb-0">Options</h5>
                     </Card.Header>
                     <Card.Body>
@@ -217,7 +217,7 @@ export function MatrixApp({ onSignOut }: MatrixAppProps) {
               </Row>
 
               <Card className="shadow-sm mt-4">
-                <Card.Header className="bg-white py-3">
+                <Card.Header className="py-3">
                   <div className="d-flex justify-content-between align-items-center">
                     <h5 className="mb-0">Results</h5>
                     <Button 
