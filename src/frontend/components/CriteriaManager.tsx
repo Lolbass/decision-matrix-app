@@ -50,7 +50,7 @@ export function CriteriaManager({ criteria, onUpdate }: CriteriaManagerProps) {
   return (
     <div className="space-y-4">
       <div className="d-flex justify-content-between align-items-center mb-4">
-        <h5 className="mb-0">Criteria</h5>
+        <h5 className="mb-0"></h5>
         <div className="d-flex align-items-center gap-3">
           <div className="text-muted">
             Total Weight: {(criteria.reduce((sum, c) => sum + c.weight, 0) * 100).toFixed(1)}%
@@ -69,39 +69,37 @@ export function CriteriaManager({ criteria, onUpdate }: CriteriaManagerProps) {
       <div className="row g-4">
         {criteria.map(criterion => (
           <div key={criterion.id} className="col-md-6 col-lg-4">
-            <Card className="h-100">
-              <Card.Body>
+            <Card className="h-100 criterion-card">
+              <Card.Body className="p-4">
                 <div className="d-flex justify-content-between align-items-start mb-3">
-                  <div>
-                    <h6 className="mb-1">{criterion.name}</h6>
+                  <div className="flex-grow-1">
+                    <h6 className="mb-1 fw-semibold">{criterion.name}</h6>
                     {criterion.description && (
-                      <p className="text-muted small mb-0">{criterion.description}</p>
+                      <p className="text-muted small mb-0 mt-1">{criterion.description}</p>
                     )}
                   </div>
                   <Button
-                    variant="ghost"
+                    variant="link"
                     size="sm"
                     onClick={() => handleDeleteCriterion(criterion.id)}
-                    className="delete-button"
+                    className="delete-button p-0"
                   >
                     <TrashIcon className="icon-sm" />
                   </Button>
                 </div>
-                <Form.Group>
-                  <Form.Label className="small">Weight (%)</Form.Label>
+                <Form.Group className="mt-3">
+                  <div className="d-flex justify-content-between align-items-center mb-2">
+                    <Form.Label className="small text-muted mb-0">Weight</Form.Label>
+                    <span className="small fw-semibold">{Math.round(criterion.weight * 100)}%</span>
+                  </div>
                   <div className="d-flex align-items-center gap-2">
                     <Form.Control
-                      type="number"
+                      type="range"
                       min="0"
                       max="100"
                       value={criterion.weight * 100}
                       onChange={(e) => handleWeightChange(criterion.id, Number(e.target.value) / 100)}
-                      className="w-75"
-                    />
-                    <ProgressBar
-                      now={criterion.weight * 100}
-                      className="w-25"
-                      variant="primary"
+                      className="form-range"
                     />
                   </div>
                 </Form.Group>
