@@ -10,7 +10,8 @@ export interface Option {
 export interface Criterion {
   id: string;
   name: string;
-  weight?: number;
+  weight: number;
+  description?: string;
 }
 
 export interface DecisionMatrix {

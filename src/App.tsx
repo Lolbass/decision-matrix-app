@@ -12,6 +12,12 @@ function App() {
   const [loading, setLoading] = useState(true);
   const [authError, setAuthError] = useState<string | null>(null);
 
+  // Initialize dark theme
+  useEffect(() => {
+    document.documentElement.setAttribute('data-bs-theme', 'dark');
+    localStorage.setItem('theme', 'dark');
+  }, []);
+
   useEffect(() => {
     let isMounted = true;
     
