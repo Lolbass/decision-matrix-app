@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Criterion } from '../types/decisionMatrix';
 import { PlusIcon, TrashIcon } from '@heroicons/react/24/outline';
 import { Card, Form, Button, ProgressBar, Modal } from 'react-bootstrap';
+import './CriteriaManager.css';
 
 interface CriteriaManagerProps {
   criteria: Criterion[];
@@ -59,9 +60,9 @@ export function CriteriaManager({ criteria, onUpdate }: CriteriaManagerProps) {
             onClick={() => setShowModal(true)}
             className="d-flex align-items-center"
           >
-          <PlusIcon className="h-5 w-5" />
-          +
-        </Button>
+            <PlusIcon className="h-5 w-5" />
+            +
+          </Button>
         </div>
       </div>
       
@@ -78,13 +79,12 @@ export function CriteriaManager({ criteria, onUpdate }: CriteriaManagerProps) {
                     )}
                   </div>
                   <Button
-                    variant="outline-secondary"
+                    variant="ghost"
                     size="sm"
                     onClick={() => handleDeleteCriterion(criterion.id)}
-                    className="d-flex align-items-center"
+                    className="delete-button"
                   >
-                    <TrashIcon className="h-4 w-4" />
-                    -
+                    <TrashIcon className="icon-sm" />
                   </Button>
                 </div>
                 <Form.Group>

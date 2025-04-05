@@ -1,0 +1,15 @@
+.delete-button {
+  color: #A1A1A1 !important;
+  background: transparent !important;
+  border: none !important;
+  padding: 0.25rem !important;
+}
+
+.delete-button:hover {
+  color: #E1E1E1 !important;
+}
+
+.icon-sm {
+  width: 1rem;
+  height: 1rem;
+} 
