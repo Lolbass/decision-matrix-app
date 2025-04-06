@@ -4,6 +4,7 @@ import type { DecisionMatrix } from '../../shared/types/matrix.types';
 import { userMatrixService } from './userMatrixService';
 import { criteriaService } from './criteriaService';
 import { optionsService } from './optionsService';
+import { optionCriteriaService } from './optionCriteriaService';
 
 type MatrixInsert = Database['public']['Tables']['matrices']['Insert'];
 type OptionRow = Database['public']['Tables']['options']['Row'];
@@ -218,10 +219,57 @@ export const matrixService = {
         throw matrixError;
       }
 
+      // Get all existing criteria for this matrix
+      const { error: criteriaFetchError } = await supabase
+        .from('criteria')
+        .select('id')
+        .eq('matrix_id', matrix.id);
+      
+      if (criteriaFetchError) {
+        console.error('Error fetching existing criteria:', criteriaFetchError);
+        throw criteriaFetchError;
+      }
+
+      // Get currentCriteriaIds
+      const currentCriteriaIds = matrix.criteria.map(c => c.id);
+
+      // Find criteria that were removed
+      const criteriaToDelete = await criteriaService.findRemovedCriteriaIds(matrix.id, currentCriteriaIds);
+
+      if (criteriaToDelete.length > 0) {
+        // First delete all related scores from option_criteria table
+        await optionCriteriaService.deleteByOptionIds(criteriaToDelete);
+        
+        // Then delete the criteria themselves
+        await criteriaService.deleteCriteriaByIds(criteriaToDelete);
+
+        // Clean up the matrix options object
+        matrix.options = matrix.options.map(option => {
+          const scores = { ...option.scores };
+          criteriaToDelete.forEach(criterionId => {
+            delete scores[criterionId];
+          });
+          return { ...option, scores };
+        });
+      }
+
+      // Find options that were removed
+      const currentOptionIds = matrix.options.map(o => o.id);
+      const optionsToDelete = await optionsService.findRemovedOptionIds(matrix.id, currentOptionIds);
+
+      if (optionsToDelete.length > 0) {
+        // First delete related option_criteria records
+        await optionCriteriaService.deleteByOptionIds(optionsToDelete);
+        
+        // Then delete the options themselves
+        await optionsService.deleteOptionsByIds(optionsToDelete);
+      }
+
       // Save criteria using criteriaService
       await criteriaService.saveCriteria(matrix.id, matrix.criteria);
 
-      // Save options using optionsService
+      // Save options using optionsService 
+      // (which will delegate scores saving to optionCriteriaService)
       await optionsService.saveOptions(matrix.id, matrix.options);
 
       return matrixData;
@@ -230,4 +278,4 @@ export const matrixService = {
       throw error;
     }
   }
-}; 
+};

@@ -78,35 +78,63 @@ export const optionsService = {
   // Batch operations
   async saveOptions(matrixId: string, options: Option[]) {
     try {
-      // Save options
+      // First save all options basic info (name, description, etc.)
       const { error: optionsError } = await supabase
         .from('options')
         .upsert(
           options.map(option => ({
             id: option.id,
             matrix_id: matrixId,
-            name: option.name,
+            name: option.name, 
             description: option.description,
+            //            position: option.position, // Removed because 'position' does not exist on type 'Option'
             active: option.active ?? true,
           })),
           { onConflict: 'id' }
         );
-
+        
       if (optionsError) throw optionsError;
-
-      // Save option-criteria scores using the new service
-      const optionCriteriaScores = options.flatMap(option =>
-        Object.entries(option.scores).map(([criterionId, score]) => ({
-          option_id: option.id,
-          criterion_id: criterionId,
-          score: score,
-        }))
-      );
-
-      await optionCriteriaService.saveScores(optionCriteriaScores);
+      
+      // Delegate the scores saving to optionCriteriaService
+      await optionCriteriaService.saveOptionCriteriaScores(options);
+      
+      return options;
     } catch (error) {
       console.error('Error saving options:', error);
       throw error;
     }
+  },
+
+  // Additional operations
+  async findRemovedOptionIds(matrixId: string, currentOptionIds: string[]): Promise<string[]> {
+    // Get all existing options for this matrix
+    const { data: existingOptions, error } = await supabase
+      .from('options')
+      .select('id')
+      .eq('matrix_id', matrixId);
+    
+    if (error) {
+      console.error('Error fetching existing options:', error);
+      throw error;
+    }
+
+    // Return option IDs that were removed
+    return existingOptions
+      .filter(o => !currentOptionIds.includes(o.id))
+      .map(o => o.id);
+  },
+
+  async deleteOptionsByIds(optionIds: string[]): Promise<void> {
+    if (optionIds.length === 0) return;
+    
+    const { error } = await supabase
+      .from('options')
+      .delete()
+      .in('id', optionIds);
+    
+    if (error) {
+      console.error('Error deleting options:', error);
+      throw error;
+    }
   }
-}; 
+};
