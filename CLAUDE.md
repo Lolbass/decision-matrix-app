@@ -7,17 +7,17 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - `npm run build` - Build for production (tsc compile + vite build)
 - `npm run lint` - Run ESLint
 - `npm run preview` - Preview production build
+- `npm run typecheck` - Run TypeScript compiler in noEmit mode
 
 ## Code Style Guidelines
-- TypeScript with strict mode; use explicit types
-- React components in PascalCase (e.g., MatrixApp)
-- Services/utilities in camelCase
-- Frontend/backend separation with shared types
+- TypeScript with strict mode; use explicit types and interfaces for data structures
+- React components in PascalCase (e.g., MatrixApp); services/utilities in camelCase
+- Frontend/backend separation with shared types in src/shared/types/
 - Use named exports over default exports
-- No unused locals/parameters allowed
-- Proper error handling with try/catch blocks
-- Organize imports: React imports first, then external libs, then local modules
-- Use functional components with hooks
-- Leverage TypeScript interfaces for data structures
-- Follow React hooks rules (useEffect dependencies array)
-- Bootstrap/Heroicons for UI components
+- No unused locals/parameters allowed (noUnusedLocals: true)
+- Proper error handling with try/catch blocks and detailed error messages
+- Import order: React imports first, then external libs, then local modules
+- Use functional components with hooks; follow React hooks rules (useEffect dependencies)
+- Prefer TypeScript interfaces for API/data types and explicit return types
+- UI components use Bootstrap and Heroicons (^2.2.0)
+- Organize Supabase queries with proper error handling and type checking

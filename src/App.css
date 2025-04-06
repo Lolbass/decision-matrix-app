@@ -40,3 +40,49 @@
 .read-the-docs {
   color: #888;
 }
+
+/* Matrix UI Improvements */
+.matrix-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.matrix-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08) !important;
+}
+
+.transition-all {
+  transition: all 0.2s ease-in-out;
+}
+
+.btn-icon {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Override Bootstrap card padding */
+.card .card-body {
+  padding: 1.5rem;
+}
+
+.rounded-pill {
+  border-radius: 50rem;
+}
+
+/* Empty state animation */
+.empty-animation svg {
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}

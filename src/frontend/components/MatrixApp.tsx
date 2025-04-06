@@ -182,7 +182,7 @@ export function MatrixApp({ onSignOut }: MatrixAppProps) {
               {showInvalidWeights && (
                 <Alert variant="warning" className="mb-4">
                   <i className="bi bi-exclamation-triangle me-2"></i>
-                  Warning: Criteria weights must sum to 1.0
+                  Warning: Criteria weights must sum to 100%
                 </Alert>
               )}
 
