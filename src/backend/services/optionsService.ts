@@ -108,5 +108,38 @@ export const optionsService = {
       console.error('Error saving options:', error);
       throw error;
     }
+  },
+
+  // Additional operations
+  async findRemovedOptionIds(matrixId: string, currentOptionIds: string[]): Promise<string[]> {
+    // Get all existing options for this matrix
+    const { data: existingOptions, error } = await supabase
+      .from('options')
+      .select('id')
+      .eq('matrix_id', matrixId);
+    
+    if (error) {
+      console.error('Error fetching existing options:', error);
+      throw error;
+    }
+
+    // Return option IDs that were removed
+    return existingOptions
+      .filter(o => !currentOptionIds.includes(o.id))
+      .map(o => o.id);
+  },
+
+  async deleteOptionsByIds(optionIds: string[]): Promise<void> {
+    if (optionIds.length === 0) return;
+    
+    const { error } = await supabase
+      .from('options')
+      .delete()
+      .in('id', optionIds);
+    
+    if (error) {
+      console.error('Error deleting options:', error);
+      throw error;
+    }
   }
-}; 
+};

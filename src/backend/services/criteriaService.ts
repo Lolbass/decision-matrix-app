@@ -90,5 +90,38 @@ export const criteriaService = {
       console.error('Error saving criteria:', error);
       throw error;
     }
+  },
+
+  // Additional operations
+  async findRemovedCriteriaIds(matrixId: string, currentCriteriaIds: string[]): Promise<string[]> {
+    // Get all existing criteria for this matrix
+    const { data: existingCriteria, error: criteriaFetchError } = await supabase
+      .from('criteria')
+      .select('id')
+      .eq('matrix_id', matrixId);
+    
+    if (criteriaFetchError) {
+      console.error('Error fetching existing criteria:', criteriaFetchError);
+      throw criteriaFetchError;
+    }
+
+    // Return criteria IDs that were removed
+    return existingCriteria
+      .filter(c => !currentCriteriaIds.includes(c.id))
+      .map(c => c.id);
+  },
+
+  async deleteCriteriaByIds(criteriaIds: string[]): Promise<void> {
+    if (criteriaIds.length === 0) return;
+    
+    const { error } = await supabase
+      .from('criteria')
+      .delete()
+      .in('id', criteriaIds);
+    
+    if (error) {
+      console.error('Error deleting criteria:', error);
+      throw error;
+    }
   }
-}; 
+};

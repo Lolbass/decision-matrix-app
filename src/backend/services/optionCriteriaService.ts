@@ -70,6 +70,20 @@ export const optionCriteriaService = {
     if (error) throw error;
   },
 
+  async deleteByOptionIds(optionIds: string[]): Promise<void> {
+    if (optionIds.length === 0) return;
+    
+    const { error } = await supabase
+      .from('option_criteria')
+      .delete()
+      .in('option_id', optionIds);
+    
+    if (error) {
+      console.error('Error deleting option criteria scores:', error);
+      throw error;
+    }
+  },
+
   // Batch operations
   async saveScores(scores: { option_id: string; criterion_id: string; score: number }[]) {
     const { error } = await supabase
@@ -81,4 +95,4 @@ export const optionCriteriaService = {
 
     if (error) throw error;
   }
-}; 
+};
