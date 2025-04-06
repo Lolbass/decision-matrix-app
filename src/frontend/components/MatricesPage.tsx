@@ -138,7 +138,7 @@ export const MatricesPage: React.FC = () => {
           <div className="d-flex justify-content-between align-items-center mb-4">
             <InputGroup className="w-50">
               <InputGroup.Text id="search-icon" className="bg-light border-end-0">
-                <MagnifyingGlassIcon width={20} height={20} className="text-muted" />
+                <MagnifyingGlassIcon width={20} height={20} className="text-secondary" />
               </InputGroup.Text>
               <Form.Control
                 placeholder="Search matrices..."
@@ -151,7 +151,7 @@ export const MatricesPage: React.FC = () => {
             
             <div className="d-flex gap-2">
               <Button 
-                variant={sortOrder === 'newest' ? 'primary' : 'outline-secondary'} 
+                variant={sortOrder === 'newest' ? 'info' : 'outline-info'} 
                 size="sm"
                 onClick={() => handleSortChange('newest')}
                 className="d-flex align-items-center gap-1"
@@ -160,7 +160,7 @@ export const MatricesPage: React.FC = () => {
                 Newest
               </Button>
               <Button 
-                variant={sortOrder === 'oldest' ? 'primary' : 'outline-secondary'} 
+                variant={sortOrder === 'oldest' ? 'info' : 'outline-info'} 
                 size="sm"
                 onClick={() => handleSortChange('oldest')}
                 className="d-flex align-items-center gap-1"
@@ -169,7 +169,7 @@ export const MatricesPage: React.FC = () => {
                 Oldest
               </Button>
               <Button 
-                variant={sortOrder === 'alphabetical' ? 'primary' : 'outline-secondary'} 
+                variant={sortOrder === 'alphabetical' ? 'info' : 'outline-info'} 
                 size="sm"
                 onClick={() => handleSortChange('alphabetical')}
                 className="d-flex align-items-center gap-1"
@@ -219,11 +219,15 @@ export const MatricesPage: React.FC = () => {
                       )}
                       
                       <div className="d-flex gap-3 mb-3">
-                        <Badge bg="primary" className="d-flex align-items-center gap-1">
+                        <Badge 
+                          bg="info" 
+                          className="d-flex align-items-center gap-1" 
+                          style={{ color: 'var(--bs-btn-color)' }}
+                        >
                           <span>{matrix.criteria.length}</span>
                           <span className="ms-1">Criteria</span>
                         </Badge>
-                        <Badge bg="secondary" className="d-flex align-items-center gap-1">
+                        <Badge bg="info" className="d-flex align-items-center gap-1 text-white opacity-75">
                           <span>{matrix.options.length}</span>
                           <span className="ms-1">Options</span>
                         </Badge>
@@ -242,7 +246,7 @@ export const MatricesPage: React.FC = () => {
                     </Card.Body>
                     <Card.Footer className="bg-transparent border-top-0">
                       <Button 
-                        variant="primary" 
+                        variant="outline-primary" 
                         className="w-100 btn-icon justify-content-center"
                         onClick={(e) => {
                           e.stopPropagation();
@@ -261,4 +265,4 @@ export const MatricesPage: React.FC = () => {
       )}
     </Container>
   );
-}; 
+};
