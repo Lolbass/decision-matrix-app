@@ -138,7 +138,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({ onAuthSuccess, authError: ex
       <Row className="justify-content-center">
         <Col md={6}>
           <Card>
-            <Card.Header className="bg-white">
+            <Card.Header className="bg-dark">
               <div className="d-flex justify-content-center">
                 {!signupDisabled ? (
                   <div className="btn-group" role="group">
