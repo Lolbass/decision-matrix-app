@@ -94,5 +94,42 @@ export const optionCriteriaService = {
       );
 
     if (error) throw error;
+  },
+
+  async saveOptionCriteriaScores(options: { id: string; scores: Record<string, number> }[]) {
+    try {
+      // Prepare data for option_criteria table
+      interface OptionCriteriaScore {
+        option_id: string;
+        criterion_id: string;
+        score: number;
+      }
+
+      const optionCriteriaData: OptionCriteriaScore[] = [];
+      
+      options.forEach(option => {
+        for (const [criterionId, score] of Object.entries(option.scores)) {
+          optionCriteriaData.push({
+            option_id: option.id,
+            criterion_id: criterionId,
+            score: score
+          });
+        }
+      });
+      
+      if (optionCriteriaData.length === 0) return;
+      
+      // Upsert all scores at once
+      const { error } = await supabase
+        .from('option_criteria')
+        .upsert(optionCriteriaData, { 
+          onConflict: 'option_id,criterion_id'
+        });
+        
+      if (error) throw error;
+    } catch (error) {
+      console.error('Error saving option criteria scores:', error);
+      throw error;
+    }
   }
 };

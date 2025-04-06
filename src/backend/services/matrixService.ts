@@ -268,7 +268,8 @@ export const matrixService = {
       // Save criteria using criteriaService
       await criteriaService.saveCriteria(matrix.id, matrix.criteria);
 
-      // Save options using optionsService
+      // Save options using optionsService 
+      // (which will delegate scores saving to optionCriteriaService)
       await optionsService.saveOptions(matrix.id, matrix.options);
 
       return matrixData;

@@ -78,32 +78,27 @@ export const optionsService = {
   // Batch operations
   async saveOptions(matrixId: string, options: Option[]) {
     try {
-      // Save options
+      // First save all options basic info (name, description, etc.)
       const { error: optionsError } = await supabase
         .from('options')
         .upsert(
           options.map(option => ({
             id: option.id,
             matrix_id: matrixId,
-            name: option.name,
+            name: option.name, 
             description: option.description,
+            //            position: option.position, // Removed because 'position' does not exist on type 'Option'
             active: option.active ?? true,
           })),
           { onConflict: 'id' }
         );
-
+        
       if (optionsError) throw optionsError;
-
-      // Save option-criteria scores using the new service
-      const optionCriteriaScores = options.flatMap(option =>
-        Object.entries(option.scores).map(([criterionId, score]) => ({
-          option_id: option.id,
-          criterion_id: criterionId,
-          score: score,
-        }))
-      );
-
-      await optionCriteriaService.saveScores(optionCriteriaScores);
+      
+      // Delegate the scores saving to optionCriteriaService
+      await optionCriteriaService.saveOptionCriteriaScores(options);
+      
+      return options;
     } catch (error) {
       console.error('Error saving options:', error);
       throw error;
