@@ -2,22 +2,20 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-## Build/Test Commands
-- `npm run dev` - Run development server
-- `npm run build` - Build for production (tsc compile + vite build)
-- `npm run lint` - Run ESLint
-- `npm run preview` - Preview production build
-- `npm run typecheck` - Run TypeScript compiler in noEmit mode
+## Commands
+- Build: `npm run build` (TypeScript compile + Vite build)
+- Dev: `npm run dev` (Vite dev server)
+- Lint: `npm run lint` (ESLint)
+- TypeCheck: `tsc -b` (TypeScript type check)
 
-## Code Style Guidelines
-- TypeScript with strict mode; use explicit types and interfaces for data structures
-- React components in PascalCase (e.g., MatrixApp); services/utilities in camelCase
-- Frontend/backend separation with shared types in src/shared/types/
-- Use named exports over default exports
-- No unused locals/parameters allowed (noUnusedLocals: true)
-- Proper error handling with try/catch blocks and detailed error messages
-- Import order: React imports first, then external libs, then local modules
-- Use functional components with hooks; follow React hooks rules (useEffect dependencies)
-- Prefer TypeScript interfaces for API/data types and explicit return types
-- UI components use Bootstrap and Heroicons (^2.2.0)
-- Organize Supabase queries with proper error handling and type checking
+## Code Guidelines
+- Use TypeScript with strict type checking
+- React components use functional style with hooks (no class components)
+- Import order: React/libraries → local modules → types/utils
+- Error handling: use try/catch with specific error types
+- Services should throw errors (not return them)
+- Prefer async/await over Promise chains
+- Use record types for key-value pairs (e.g., Record<string, ScoringScale>)
+- Follow existing naming: PascalCase for components, camelCase for functions/variables
+- Keep components focused and composable
+- Use relative imports within modules, absolute for cross-module references

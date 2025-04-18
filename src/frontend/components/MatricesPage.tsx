@@ -90,8 +90,8 @@ export const MatricesPage: React.FC = () => {
   };
 
   return (
-    <Container className="py-5">
-      <div className="d-flex justify-content-between align-items-center mb-4">
+    <Container className="py-4">
+      <div className="d-flex justify-content-between align-items-center mb-3">
         <div>
           <h1 className="display-6 fw-bold mb-1">My Decision Matrices</h1>
           <p className="text-muted">Manage and access your decision matrices</p>
@@ -117,7 +117,7 @@ export const MatricesPage: React.FC = () => {
         <Alert variant="danger">{error}</Alert>
       ) : matrices.length === 0 ? (
         <div className="hero-section">
-          <Card className="text-center my-5 shadow-sm py-5 border-0 bg-light">
+          <Card className="text-center my-4 shadow-sm py-4 border-0 bg-light">
             <Card.Body className="py-5">
               <div className="empty-animation">
                 <ClipboardDocumentIcon width={80} height={80} className="text-primary mb-3 opacity-75" />
@@ -138,7 +138,7 @@ export const MatricesPage: React.FC = () => {
         </div>
       ) : (
         <>
-          <Card className="border-0 shadow-sm mb-4">
+          <Card className="border-0 shadow-sm mb-3">
             <Card.Body>
               <div className="d-flex flex-wrap justify-content-between align-items-center gap-3">
                 <InputGroup className="flex-grow-1" style={{ maxWidth: '500px' }}>
@@ -217,15 +217,15 @@ export const MatricesPage: React.FC = () => {
               <p>Try a different search term or <Button variant="link" onClick={handleCreateNew} className="p-0">create a new matrix</Button>.</p>
             </Alert>
           ) : viewMode === 'grid' ? (
-            <Row xs={1} md={2} xl={3} className="g-4">
+            <Row xs={1} md={2} xl={3} className="g-3">
               {filteredMatrices.map((matrix) => (
                 <Col key={matrix.id}>
                   <Card 
-                    className="h-100 shadow-sm matrix-card border-0 transition-all" 
+                    className="h-100 shadow-sm matrix-card border-0 transition-all hover-lift" 
                     onClick={() => handleMatrixClick(matrix.id)}
                     style={{ cursor: 'pointer' }}
                   >
-                    <Card.Body className="d-flex flex-column p-4">
+                    <Card.Body className="d-flex flex-column p-3">
                       <div className="d-flex justify-content-between align-items-start mb-3">
                         <Card.Title className="fw-bold h5">{matrix.name}</Card.Title>
                         <OverlayTrigger placement="top" overlay={<Tooltip>Delete matrix</Tooltip>}>
@@ -279,7 +279,7 @@ export const MatricesPage: React.FC = () => {
                         </div>
                       </div>
                     </Card.Body>
-                    <Card.Footer className="bg-dark border-top p-3">
+                    <Card.Footer className="bg-dark border-top p-2">
                       <Button 
                         variant="outline-primary" 
                         className="w-100 d-flex align-items-center justify-content-center gap-2"
@@ -304,7 +304,7 @@ export const MatricesPage: React.FC = () => {
                   onClick={() => handleMatrixClick(matrix.id)}
                   style={{ cursor: 'pointer' }}
                 >
-                  <Card.Body className="p-4">
+                  <Card.Body className="p-3">
                     <div className="d-flex flex-wrap justify-content-between gap-3">
                       <div className="d-flex flex-column flex-grow-1" style={{ maxWidth: '60%' }}>
                         <div className="d-flex justify-content-between align-items-start">

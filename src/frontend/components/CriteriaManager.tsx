@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Criterion } from '../types/decisionMatrix';
-import { PlusIcon, TrashIcon } from '@heroicons/react/24/outline';
-import { Card, Form, Button, ProgressBar, Modal } from 'react-bootstrap';
+import { PlusIcon, TrashIcon, ScaleIcon } from '@heroicons/react/24/outline';
+import { Card, Form, Button, Modal } from 'react-bootstrap';
 import './CriteriaManager.css';
 
 interface CriteriaManagerProps {
@@ -16,6 +16,9 @@ export function CriteriaManager({ criteria, onUpdate }: CriteriaManagerProps) {
     weight: 0,
     description: '',
   });
+
+  const totalWeight = criteria.reduce((sum, c) => sum + c.weight, 0);
+  const isWeightValid = Math.abs(totalWeight - 1) < 0.01;
 
   const handleAddCriterion = () => {
     if (!newCriterion.name || !newCriterion.weight) return;
@@ -48,119 +51,162 @@ export function CriteriaManager({ criteria, onUpdate }: CriteriaManagerProps) {
   };
 
   return (
-    <div className="space-y-4">
-      <div className="d-flex justify-content-between align-items-center mb-4">
-        <h5 className="mb-0"></h5>
-        <div className="d-flex align-items-center gap-3">
-          <div className="text-muted">
-            Total Weight: {(criteria.reduce((sum, c) => sum + c.weight, 0) * 100).toFixed(1)}%
+    <div className="criteria-manager">
+      <div className="criteria-header">
+        <div className="header-content">
+          <div className="header-title">
+            <ScaleIcon className="header-icon" />
+            <h5 className="mb-0">Evaluation Criteria</h5>
           </div>
-          <Button
-            variant="primary"
-            onClick={() => setShowModal(true)}
-            className="d-flex align-items-center"
-          >
-            <PlusIcon className="h-5 w-5" />
-            +
-          </Button>
+          <div className="weight-summary">
+            <div className="weight-indicator">
+              <div 
+                className="weight-progress" 
+                style={{ 
+                  width: `${totalWeight * 100}%`,
+                  backgroundColor: isWeightValid ? 'var(--accent-primary)' : 'var(--accent-warning)'
+                }} 
+              />
+            </div>
+            <div className="weight-text">
+              <span className="weight-value" style={{ color: isWeightValid ? 'var(--accent-success)' : 'var(--accent-warning)' }}>
+                {(totalWeight * 100).toFixed(0)}%
+              </span>
+            </div>
+            <Button
+              variant="primary"
+              onClick={() => setShowModal(true)}
+              className="add-criterion-btn"
+            >
+              <PlusIcon className="btn-icon" />
+              <span>Add Criterion</span>
+            </Button>
+          </div>
         </div>
       </div>
       
-      <div className="row g-4">
-        {criteria.map(criterion => (
-          <div key={criterion.id} className="col-md-6 col-lg-4">
-            <Card className="h-100 criterion-card">
-              <Card.Body className="p-4">
-                <div className="d-flex justify-content-between align-items-start mb-3">
-                  <div className="flex-grow-1">
-                    <h6 className="mb-1 fw-semibold">{criterion.name}</h6>
+      <div className="criteria-grid">
+        {criteria.map((criterion, index) => (
+          <div 
+            key={criterion.id} 
+            className="criterion-wrapper"
+            style={{ animationDelay: `${index * 0.1}s` }}
+          >
+            <Card className="criterion-card">
+              <Card.Body>
+                <div className="criterion-header">
+                  <div className="criterion-title">
+                    <h6>{criterion.name}</h6>
                     {criterion.description && (
-                      <p className="text-muted small mb-0 mt-1">{criterion.description}</p>
+                      <p className="criterion-description">{criterion.description}</p>
                     )}
                   </div>
                   <Button
                     variant="link"
-                    size="sm"
                     onClick={() => handleDeleteCriterion(criterion.id)}
-                    className="delete-button p-0"
+                    className="delete-button"
+                    title="Delete criterion"
                   >
                     <TrashIcon className="icon-sm" />
                   </Button>
                 </div>
-                <Form.Group className="mt-3">
-                  <div className="d-flex justify-content-between align-items-center mb-2">
-                    <Form.Label className="small text-muted mb-0">Weight</Form.Label>
-                    <span className="small fw-semibold">{Math.round(criterion.weight * 100)}%</span>
+                <div className="weight-control">
+                  <div className="weight-header">
+                    <span className="weight-label">Weight</span>
+                    <span className="weight-value">{Math.round(criterion.weight * 100)}%</span>
                   </div>
-                  <div className="d-flex align-items-center gap-2">
-                    <Form.Control
-                      type="range"
-                      min="0"
-                      max="100"
+                  <div className="weight-slider">
+                    <div 
+                      className="weight-track"
+                      style={{ width: `${criterion.weight * 100}%` }}
+                    />
+                    <Form.Range
+                      min={0}
+                      max={100}
                       value={criterion.weight * 100}
                       onChange={(e) => handleWeightChange(criterion.id, Number(e.target.value) / 100)}
-                      className="form-range"
+                      className="weight-input"
                     />
                   </div>
-                </Form.Group>
+                </div>
               </Card.Body>
             </Card>
           </div>
         ))}
       </div>
 
-      <Modal show={showModal} onHide={handleCloseModal} centered>
+      <Modal show={showModal} onHide={handleCloseModal} centered className="criterion-modal">
         <Modal.Header closeButton>
-          <Modal.Title>Add New Criterion</Modal.Title>
+          <Modal.Title>
+            <div className="modal-title">
+              <ScaleIcon className="modal-icon" />
+              Add New Criterion
+            </div>
+          </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Form.Group className="mb-3">
+          <Form.Group className="form-group">
             <Form.Label>Name</Form.Label>
             <Form.Control
               type="text"
               value={newCriterion.name}
               onChange={(e) => setNewCriterion({ ...newCriterion, name: e.target.value })}
-              placeholder="Enter criterion name"
+              placeholder="e.g., Cost, Quality, Time"
               autoFocus
+              className="form-input"
             />
           </Form.Group>
-          <Form.Group className="mb-3">
-            <Form.Label>Weight (%)</Form.Label>
-            <div className="d-flex align-items-center gap-2">
+          
+          <Form.Group className="form-group">
+            <Form.Label>Weight</Form.Label>
+            <div className="weight-input-group">
               <Form.Control
                 type="number"
                 min="0"
                 max="100"
                 value={(newCriterion.weight || 0) * 100}
-                onChange={(e) => setNewCriterion({ ...newCriterion, weight: Number(e.target.value) / 100 })}
-                className="w-75"
+                onChange={(e) => setNewCriterion({ 
+                  ...newCriterion, 
+                  weight: Math.min(Math.max(Number(e.target.value) / 100, 0), 1) 
+                })}
+                className="number-input"
               />
-              <ProgressBar
-                now={(newCriterion.weight || 0) * 100}
-                className="w-25"
-                variant="primary"
-              />
+              <div className="weight-visual">
+                <div 
+                  className="weight-fill"
+                  style={{ width: `${(newCriterion.weight || 0) * 100}%` }}
+                />
+                <span className="weight-percentage">{Math.round((newCriterion.weight || 0) * 100)}%</span>
+              </div>
             </div>
+            {totalWeight + (newCriterion.weight || 0) > 1 && (
+              <small className="text-warning mt-1">
+                Total weight will exceed 100%
+              </small>
+            )}
           </Form.Group>
-          <Form.Group>
+          
+          <Form.Group className="form-group">
             <Form.Label>Description (optional)</Form.Label>
             <Form.Control
               as="textarea"
               value={newCriterion.description}
               onChange={(e) => setNewCriterion({ ...newCriterion, description: e.target.value })}
-              placeholder="Enter description"
-              rows={2}
+              placeholder="Add details about how this criterion should be evaluated"
+              rows={3}
+              className="form-input description-input"
             />
           </Form.Group>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleCloseModal}>
+          <Button variant="secondary" onClick={handleCloseModal} className="cancel-btn">
             Cancel
           </Button>
           <Button
             variant="primary"
             onClick={handleAddCriterion}
             disabled={!newCriterion.name || !newCriterion.weight}
+            className="submit-btn"
           >
             Add Criterion
           </Button>

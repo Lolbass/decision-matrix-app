@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 import { CriteriaManager } from './CriteriaManager';
 import { OptionsManager } from './OptionsManager';
 import { EditableTitle } from './EditableTitle';
-import { calculateAllScores } from '../utils/scoreCalculator';
+import { Results } from './Results';
 import { DecisionMatrix, Criterion, Option } from '../../shared/types/matrix.types';
 import { matrixService } from '../../backend/services/matrixService';
 import { authService } from '../../backend/services/authService';
@@ -28,7 +28,7 @@ export function MatrixApp({ onSignOut }: MatrixAppProps) {
     updated_at: new Date(),
   });
 
-  const [scores, setScores] = useState<Record<string, number>>({});
+
   const [showInvalidWeights, setShowInvalidWeights] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
@@ -101,10 +101,7 @@ export function MatrixApp({ onSignOut }: MatrixAppProps) {
     handleMatrixChange({ options });
   };
 
-  const calculateResults = () => {
-    const results = calculateAllScores(matrix);
-    setScores(results);
-  };
+
 
   const handleSave = async () => {
     try {
@@ -130,7 +127,7 @@ export function MatrixApp({ onSignOut }: MatrixAppProps) {
   };
 
   return (
-    <Container fluid className="py-5 min-vh-100">
+    <Container fluid className="py-3 min-vh-100 page-header">
       <Navigation onSignOut={handleSignOut} />
       <Row className="justify-content-center g-4">
         <Col lg={10}>
@@ -142,7 +139,7 @@ export function MatrixApp({ onSignOut }: MatrixAppProps) {
             </div>
           ) : (
             <>
-              <Card className="shadow-sm mb-4">
+              <Card className="shadow-sm mb-3">
                 <Card.Body>
                   <div className="d-flex justify-content-between align-items-center">
                     <EditableTitle
@@ -168,30 +165,27 @@ export function MatrixApp({ onSignOut }: MatrixAppProps) {
               </Card>
 
               {saveError && (
-                <Alert variant="danger" className="mb-4" onClose={() => setSaveError(null)} dismissible>
+                <Alert variant="danger" className="mb-3" onClose={() => setSaveError(null)} dismissible>
                   {saveError}
                 </Alert>
               )}
 
               {saveSuccess && (
-                <Alert variant="success" className="mb-4" onClose={() => setSaveSuccess(false)} dismissible>
+                <Alert variant="success" className="mb-3" onClose={() => setSaveSuccess(false)} dismissible>
                   Matrix saved successfully!
                 </Alert>
               )}
 
               {showInvalidWeights && (
-                <Alert variant="warning" className="mb-4">
+                <Alert variant="warning" className="mb-3">
                   <i className="bi bi-exclamation-triangle me-2"></i>
                   Warning: Criteria weights must sum to 100%
                 </Alert>
               )}
 
-              <Row className="g-4">
+              <Row className="g-3">
                 <Col xs={12}>
-                  <Card className="shadow-sm h-100">
-                    <Card.Header className="py-3">
-                      <h5 className="mb-0">Criteria</h5>
-                    </Card.Header>
+                  <Card className="shadow-sm h-100 border-0">
                     <Card.Body>
                       <CriteriaManager
                         criteria={matrix.criteria}
@@ -201,10 +195,7 @@ export function MatrixApp({ onSignOut }: MatrixAppProps) {
                   </Card>
                 </Col>
                 <Col xs={12}>
-                  <Card className="shadow-sm h-100">
-                    <Card.Header className="py-3">
-                      <h5 className="mb-0">Options</h5>
-                    </Card.Header>
+                  <Card className="shadow-sm h-100 border-0">
                     <Card.Body>
                       <OptionsManager
                         options={matrix.options}
@@ -216,87 +207,8 @@ export function MatrixApp({ onSignOut }: MatrixAppProps) {
                 </Col>
               </Row>
 
-              <Card className="shadow-sm mt-4">
-                <Card.Header className="py-3">
-                  <div className="d-flex justify-content-between align-items-center">
-                    <h5 className="mb-0">Results</h5>
-                    <Button 
-                      variant="primary" 
-                      onClick={calculateResults}
-                      className="px-4"
-                      disabled={matrix.options.length === 0 || matrix.criteria.length === 0}
-                    >
-                      Calculate Scores
-                    </Button>
-                  </div>
-                </Card.Header>
-                <Card.Body>
-                  {Object.keys(scores).length > 0 ? (
-                    <div className="table-responsive">
-                      <table className="table table-hover align-middle mb-0">
-                        <thead>
-                          <tr>
-                            <th className="border-bottom">Option</th>
-                            <th className="border-bottom text-end" style={{ width: '200px' }}>Score</th>
-                            <th className="border-bottom" style={{ width: '50%' }}>Visualization</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {Object.entries(scores)
-                            .sort(([, a], [, b]) => b - a)
-                            .map(([optionId, score]) => {
-                              const option = matrix.options.find((opt: Option) => opt.id === optionId);
-                              const maxScore = Math.max(...Object.values(scores));
-                              const percentage = (score / maxScore) * 100;
-                              
-                              return (
-                                <tr key={optionId}>
-                                  <td>
-                                    <div className="fw-medium">{option?.name}</div>
-                                    {option?.description && (
-                                      <small className="text-muted">{option.description}</small>
-                                    )}
-                                  </td>
-                                  <td className="text-end fw-bold">
-                                    {score.toFixed(2)}
-                                  </td>
-                                  <td>
-                                    <div className="d-flex align-items-center gap-2">
-                                      <div className="flex-grow-1">
-                                        <div className="progress" style={{ height: '10px' }}>
-                                          <div
-                                            className="progress-bar bg-primary"
-                                            role="progressbar"
-                                            style={{ width: `${percentage}%` }}
-                                            aria-valuenow={percentage}
-                                            aria-valuemin={0}
-                                            aria-valuemax={100}
-                                          />
-                                        </div>
-                                      </div>
-                                      <small className="text-muted" style={{ width: '45px' }}>
-                                        {percentage.toFixed(0)}%
-                                      </small>
-                                    </div>
-                                  </td>
-                                </tr>
-                              );
-                            })}
-                        </tbody>
-                      </table>
-                    </div>
-                  ) : (
-                    <div className="text-center py-4">
-                      <p className="text-muted mb-0">
-                        {matrix.options.length === 0 || matrix.criteria.length === 0 ? (
-                          'Add options and criteria to calculate scores'
-                        ) : (
-                          'Click "Calculate Scores" to see the results'
-                        )}
-                      </p>
-                    </div>
-                  )}
-                </Card.Body>
+              <Card className="shadow-sm mt-3 border-0">
+                <Results matrix={matrix} />
               </Card>
             </>
           )}

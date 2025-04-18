@@ -1,6 +1,6 @@
 import { supabase } from '../lib/supabase';
 import type { Database } from '../types/database.types';
-import type { DecisionMatrix } from '../../frontend/types/matrix.types';
+import type { DecisionMatrix } from '../../shared/types/matrix.types';
 import { matrixService } from './matrixService';
 
 type UserMatrix = Database['public']['Tables']['user_matrices']['Row'];
