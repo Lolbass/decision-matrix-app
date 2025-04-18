@@ -127,7 +127,7 @@ export function MatrixApp({ onSignOut }: MatrixAppProps) {
   };
 
   return (
-    <Container fluid className="py-5 min-vh-100">
+    <Container fluid className="py-3 min-vh-100 page-header">
       <Navigation onSignOut={handleSignOut} />
       <Row className="justify-content-center g-4">
         <Col lg={10}>
@@ -139,7 +139,7 @@ export function MatrixApp({ onSignOut }: MatrixAppProps) {
             </div>
           ) : (
             <>
-              <Card className="shadow-sm mb-4">
+              <Card className="shadow-sm mb-3">
                 <Card.Body>
                   <div className="d-flex justify-content-between align-items-center">
                     <EditableTitle
@@ -165,30 +165,27 @@ export function MatrixApp({ onSignOut }: MatrixAppProps) {
               </Card>
 
               {saveError && (
-                <Alert variant="danger" className="mb-4" onClose={() => setSaveError(null)} dismissible>
+                <Alert variant="danger" className="mb-3" onClose={() => setSaveError(null)} dismissible>
                   {saveError}
                 </Alert>
               )}
 
               {saveSuccess && (
-                <Alert variant="success" className="mb-4" onClose={() => setSaveSuccess(false)} dismissible>
+                <Alert variant="success" className="mb-3" onClose={() => setSaveSuccess(false)} dismissible>
                   Matrix saved successfully!
                 </Alert>
               )}
 
               {showInvalidWeights && (
-                <Alert variant="warning" className="mb-4">
+                <Alert variant="warning" className="mb-3">
                   <i className="bi bi-exclamation-triangle me-2"></i>
                   Warning: Criteria weights must sum to 100%
                 </Alert>
               )}
 
-              <Row className="g-4">
+              <Row className="g-3">
                 <Col xs={12}>
-                  <Card className="shadow-sm h-100">
-                    <Card.Header className="py-3">
-                      <h5 className="mb-0">Criteria</h5>
-                    </Card.Header>
+                  <Card className="shadow-sm h-100 border-0">
                     <Card.Body>
                       <CriteriaManager
                         criteria={matrix.criteria}
@@ -198,10 +195,7 @@ export function MatrixApp({ onSignOut }: MatrixAppProps) {
                   </Card>
                 </Col>
                 <Col xs={12}>
-                  <Card className="shadow-sm h-100">
-                    <Card.Header className="py-3">
-                      <h5 className="mb-0">Options</h5>
-                    </Card.Header>
+                  <Card className="shadow-sm h-100 border-0">
                     <Card.Body>
                       <OptionsManager
                         options={matrix.options}
@@ -213,7 +207,7 @@ export function MatrixApp({ onSignOut }: MatrixAppProps) {
                 </Col>
               </Row>
 
-              <Card className="shadow-sm mt-4">
+              <Card className="shadow-sm mt-3 border-0">
                 <Results matrix={matrix} />
               </Card>
             </>

@@ -27,50 +27,64 @@ export function Results({ matrix }: ResultsProps) {
   }
 
   return (
-    <div className="results-container">
-      <div className="results-header">
+    <div className="results-container p-4">
+      <div className="results-header mb-4">
         <div className="header-title">
           <ChartBarIcon className="header-icon" />
           <h2>Results</h2>
         </div>
       </div>
-
-      <div className="results-grid">
-        {[...matrix.options]
-          .sort((a, b) => scores[b.id] - scores[a.id])
-          .map((option, index) => {
-            const score = scores[option.id];
-            const isBest = bestOption?.id === option.id;
-            
-            return (
-              <div 
-                key={option.id} 
-                className={`result-card ${isBest ? 'best-option' : ''}`}
-                style={{
-                  animationDelay: `${index * 0.1}s`
-                }}
-              >
-                <div className="card-header">
-                  <div className="option-info">
-                    <h4>{option.name}</h4>
-                    {isBest && (
-                      <div className="best-badge">
-                        <TrophyIcon className="badge-icon" />
+      <div className="results-table-container">
+        <table className="results-table">
+          <thead>
+            <tr>
+              <th>Rank</th>
+              <th>Option</th>
+              <th>Score</th>
+              <th>Visualization</th>
+            </tr>
+          </thead>
+          <tbody>
+            {[...matrix.options]
+              .sort((a, b) => scores[b.id] - scores[a.id])
+              .map((option, index) => {
+                const score = scores[option.id];
+                const isBest = bestOption?.id === option.id;
+                const scorePercentage = (score / 5) * 100;
+                
+                return (
+                  <tr 
+                    key={option.id} 
+                    className={isBest ? 'best-option-row' : ''}
+                  >
+                    <td className="rank-cell">{index + 1}</td>
+                    <td className="option-cell">
+                      <div className="option-name">
+                        {option.name}
+                        {isBest && <TrophyIcon className="mini-trophy-icon" />}
                       </div>
-                    )}
-                  </div>
-                  <div className="score-value">{score.toFixed(1)}</div>
-                </div>
-
-                <div className="score-bar-container">
-                  <div 
-                    className="score-bar" 
-                    style={{ width: `${(score / 5) * 100}%` }} 
-                  />
-                </div>
-              </div>
-            );
-          })}
+                      {option.description && (
+                        <div className="option-description">{option.description}</div>
+                      )}
+                    </td>
+                    <td className="score-cell">{score.toFixed(1)}</td>
+                    <td className="bar-cell">
+                      <div className="score-bar-container">
+                        <div 
+                          className="score-bar" 
+                          style={{ width: `${scorePercentage}%` }}
+                        >
+                          {scorePercentage > 40 && (
+                            <span className="bar-score">{score.toFixed(1)}</span>
+                          )}
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                );
+              })}
+          </tbody>
+        </table>
       </div>
     </div>
   );

@@ -1,7 +1,9 @@
 import React from 'react';
-import { Navbar, Container, Button } from 'react-bootstrap';
-import { useNavigate } from 'react-router-dom';
+import { Navbar, Container, Button, Nav } from 'react-bootstrap';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { ThemeToggle } from './ThemeToggle.tsx';
+import { ChartBarIcon, TableCellsIcon, ArrowRightOnRectangleIcon, HomeIcon } from '@heroicons/react/24/outline';
+import './Navigation.css';
 
 interface NavigationProps {
   onSignOut?: () => void;
@@ -9,23 +11,62 @@ interface NavigationProps {
 
 export const Navigation: React.FC<NavigationProps> = ({ onSignOut }) => {
   const navigate = useNavigate();
-
+  const location = useLocation();
+  
+  // Check if we're on the matrices page
+  const isMatricesPage = location.pathname === '/matrices';
+  // Check if we're on the home page
+  const isHomePage = location.pathname === '/';
+  
   return (
-    <Navbar bg="transparent" expand="lg" className="mb-4">
-      <Container>
+    <Navbar 
+      expand="lg" 
+      className="py-2 mb-3 navigation-bar"
+      variant="dark"
+    >
+      <Container fluid="lg">
         <Navbar.Brand 
           onClick={() => navigate('/')} 
-          style={{ cursor: 'pointer' }}
+          className="d-flex align-items-center gap-2 brand-logo"
         >
-          Decision Matrix
+          <TableCellsIcon width={24} height={24} />
+          <span className="fw-bold">Decision Matrix</span>
         </Navbar.Brand>
-        <Navbar.Toggle aria-controls="basic-navbar-nav" />
-        <Navbar.Collapse id="basic-navbar-nav" className="justify-content-end">
-          <div className="d-flex align-items-center gap-2">
+        
+        <Navbar.Toggle aria-controls="navbar-nav" />
+        
+        <Navbar.Collapse id="navbar-nav">
+          <Nav className="me-auto">
+            <Nav.Link 
+              onClick={() => navigate('/')}
+              active={isHomePage}
+              className="d-flex align-items-center gap-2"
+            >
+              <HomeIcon width={18} height={18} />
+              <span>New Matrix</span>
+            </Nav.Link>
+            
+            <Nav.Link 
+              onClick={() => navigate('/matrices')}
+              active={isMatricesPage}
+              className="d-flex align-items-center gap-2"
+            >
+              <ChartBarIcon width={18} height={18} />
+              <span>My Matrices</span>
+            </Nav.Link>
+          </Nav>
+          
+          <div className="d-flex align-items-center gap-3">
             <ThemeToggle />
             {onSignOut && (
-              <Button variant="outline-danger" onClick={onSignOut}>
-                Sign Out
+              <Button 
+                variant="outline-light" 
+                size="sm"
+                onClick={onSignOut}
+                className="d-flex align-items-center gap-2 sign-out-btn"
+              >
+                <ArrowRightOnRectangleIcon width={18} height={18} />
+                <span>Sign Out</span>
               </Button>
             )}
           </div>

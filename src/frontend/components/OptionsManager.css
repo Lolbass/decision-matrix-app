@@ -9,7 +9,7 @@
   justify-content: space-between;
   align-items: center;
   background: var(--bg-secondary);
-  padding: 1rem 1.5rem;
+  padding: 0 1rem 0 1.5rem;
   border-radius: 12px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
@@ -70,7 +70,7 @@
 .options-content {
   background: var(--bg-secondary);
   border-radius: 12px;
-  padding: 1.5rem;
+  padding: 1.25rem;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 

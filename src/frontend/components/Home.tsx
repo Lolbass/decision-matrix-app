@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Button, Modal, Form, Alert } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { matrixService } from '../../backend/services/matrixService';
+import { authService } from '../../backend/services/authService';
+import { Navigation } from './Navigation';
 
 export const Home: React.FC = () => {
   const navigate = useNavigate();
@@ -10,6 +12,22 @@ export const Home: React.FC = () => {
   const [matrixDescription, setMatrixDescription] = useState('');
   const [isCreating, setIsCreating] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  
+  useEffect(() => {
+    // Check if user is logged in
+    const checkAuth = async () => {
+      try {
+        const user = await authService.getCurrentUser();
+        setIsLoggedIn(!!user);
+      } catch (error) {
+        console.error('Error checking auth status:', error);
+        setIsLoggedIn(false);
+      }
+    };
+    
+    checkAuth();
+  }, []);
 
   const handleCreateMatrix = async () => {
     if (!matrixName.trim()) return;
@@ -44,11 +62,23 @@ export const Home: React.FC = () => {
     }
   };
 
+  const handleSignOut = async () => {
+    try {
+      await authService.signOut();
+      setIsLoggedIn(false);
+      navigate('/');
+    } catch (error) {
+      console.error('Error signing out:', error);
+    }
+  };
+
   return (
-    <Container className="py-5">
-      <Row className="justify-content-center">
-        <Col md={8} className="text-center">
-          <h1 className="display-4 mb-4">Welcome to Decision Matrix</h1>
+    <>
+      <Navigation onSignOut={isLoggedIn ? handleSignOut : undefined} />
+      <Container className="py-4">
+        <Row className="justify-content-center">
+          <Col md={8} className="text-center">
+            <h1 className="display-4 mb-4">Welcome to Decision Matrix</h1>
           <p className="lead mb-4">
             Make better decisions by evaluating multiple options against predefined criteria.
             Our intuitive interface helps you weigh different factors and find the best solution.
@@ -139,5 +169,6 @@ export const Home: React.FC = () => {
         </Modal.Footer>
       </Modal>
     </Container>
+    </>
   );
 }; 

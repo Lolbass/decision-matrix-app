@@ -6,8 +6,8 @@
 }
 
 .matrix-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.12);
 }
 
 /* Badge customization */
@@ -23,7 +23,7 @@
 
 /* Hero section */
 .hero-section {
-  padding: 4rem 0;
+  padding: 3rem 0;
   position: relative;
   overflow: hidden;
 }
@@ -66,6 +66,17 @@
 .btn-icon svg {
   width: 1.25rem;
   height: 1.25rem;
+}
+
+/* Card styles */
+.card {
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.card-header {
+  padding: 1rem 1.25rem;
+  background-color: rgba(0, 0, 0, 0.03);
 }
 
 /* Scrollbar customization */

@@ -204,6 +204,31 @@ export const authService = {
     return validateSession();
   },
   
+  // Check if the current user is an admin
+  async isAdmin() {
+    try {
+      const user = await this.getCurrentUser();
+      if (!user) return false;
+      
+      // Get user role from the database
+      const { data, error } = await supabase
+        .from('users')
+        .select('role')
+        .eq('id', user.id)
+        .single();
+        
+      if (error) {
+        console.error('Error checking admin status:', error);
+        return false;
+      }
+      
+      return data.role === 'admin';
+    } catch (error) {
+      console.error('Error checking admin status:', error);
+      return false;
+    }
+  },
+  
   // Force confirm a user created without email verification
   async manuallyConfirmUser(userId: string) {
     try {
