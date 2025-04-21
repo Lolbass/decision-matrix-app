@@ -82,8 +82,6 @@
   height: 1.25rem;
 }
 
-
-
 .criteria-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -224,6 +222,16 @@
 
 .weight-input::-webkit-slider-thumb:hover {
   transform: scale(1.2);
+}
+
+/* Light mode specific styles */
+[data-bs-theme="light"] .weight-track {
+  background: #0d6efd;
+  opacity: 0.8;
+}
+
+[data-bs-theme="light"] .weight-input::-webkit-slider-thumb {
+  background: #0d6efd;
 }
 
 .criterion-modal .modal-content {
