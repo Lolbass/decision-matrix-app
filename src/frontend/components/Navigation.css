@@ -4,6 +4,40 @@
   margin-bottom: 2rem;
   /* border-radius: 0 0 10px 10px; */
 }
+
+/* Light mode styles */
+[data-bs-theme="light"] .navigation-bar {
+  background: linear-gradient(90deg, var(--accent-primary) -10%, #2c3e50 100%);
+}
+
+[data-bs-theme="light"] .navbar-nav .nav-link {
+  color: rgba(0, 0, 0, 0.8);
+}
+
+[data-bs-theme="light"] .navbar-nav .nav-link:hover {
+  color: black;
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+[data-bs-theme="light"] .navbar-nav .nav-link.active {
+  color: black;
+  background-color: rgba(0, 0, 0, 0.15);
+}
+
+[data-bs-theme="light"] .brand-logo span {
+  color: black;
+}
+
+[data-bs-theme="light"] .sign-out-btn {
+  color: black;
+  border-color: rgba(0, 0, 0, 0.3);
+}
+
+[data-bs-theme="light"] .sign-out-btn:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+  border-color: rgba(0, 0, 0, 0.5);
+}
+
 .page-header {
   padding: 0 !important;
 }

@@ -1,6 +1,6 @@
 # Decision Matrix App
 
-A modern web application for creating and managing decision matrices. Built with React, TypeScript, and Supabase. Features a sleek dark theme and intuitive user interface.
+A modern web application for creating and managing decision matrices. Built with React, TypeScript, and Supabase. Features a sleek dark/light theme switcher and intuitive user interface.
 
 ## Features
 
@@ -9,7 +9,8 @@ A modern web application for creating and managing decision matrices. Built with
 - ⚖️ Define criteria with weights
 - 📝 Add and evaluate options
 - 📈 Automatic score calculation with visual score bars
-- 🎨 Modern, responsive UI with dark theme
+- 🎨 Modern, responsive UI with dark/light theme support
+- 🌓 Theme switcher with persistent preferences
 - 🔍 Advanced search and sorting capabilities
 - ⚡ Real-time updates
 - 🏠 Welcome page with quick actions
@@ -23,10 +24,11 @@ A modern web application for creating and managing decision matrices. Built with
 - **Frontend:**
   - React 18
   - TypeScript
-  - Bootstrap 5
+  - Bootstrap 5 with theme support
   - React Bootstrap
   - Heroicons
   - React Router DOM
+  - CSS Variables for theming
 
 - **Backend:**
   - Supabase (PostgreSQL)
@@ -143,6 +145,31 @@ The application uses a simplified authentication system:
 - No password management required
 - Automatic user creation on first sign-in
 - Secure session management
+
+## Theme Support
+
+The application features a comprehensive theming system:
+
+1. **Theme Switching**
+   - Toggle between light and dark themes
+   - Theme preference is persisted in local storage
+   - Smooth transitions between themes
+
+2. **CSS Variables**
+   - Theme-aware color system using CSS variables
+   - Consistent styling across components
+   - Easy theme customization
+
+3. **Component Theming**
+   - All components are theme-aware
+   - Proper contrast in both themes
+   - Accessible color combinations
+   - Visual indicators and progress bars adapt to current theme
+
+4. **Bootstrap Integration**
+   - Uses Bootstrap's theme system
+   - Custom theme extensions for specialized components
+   - Consistent with Bootstrap's design language
 
 ## Contributing
 
