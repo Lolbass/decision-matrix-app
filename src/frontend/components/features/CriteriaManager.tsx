@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Criterion } from '../../../shared/types/matrix.types';
 import { PlusIcon, TrashIcon, ScaleIcon } from '@heroicons/react/24/outline';
 import { Card, Form, Button, Modal } from 'react-bootstrap';
-import '../../../styles/components/features/CriteriaManager.css';
+import '../../styles/components/features/CriteriaManager.css';
 
 interface CriteriaManagerProps {
   criteria: Criterion[];
