@@ -1,0 +1,138 @@
+flowchart TD
+    %% Main user entry point
+    User((User))
+    
+    %% Application Layers
+    subgraph "Frontend Application"
+        direction TB
+        ReactApp["App.tsx"]
+        
+        subgraph "Pages"
+            direction LR
+            Auth["AuthPage"]
+            Home["Home"]
+            MatricesPage["MatricesPage"]
+            MatrixEdit["MatrixApp"]
+        end
+        
+        subgraph "Features"
+            direction LR
+            CriteriaManager["Criteria\nManager"]
+            OptionsManager["Options\nManager"]
+            ResultsView["Results\nView"]
+        end
+        
+        subgraph "UI Components"
+            direction LR
+            Navigation["Navigation"]
+            EditableTitle["Editable\nTitle"]
+            ThemeToggle["Theme\nToggle"]
+        end
+        
+        subgraph "Frontend Hooks"
+            direction TB
+            useMatrix["useMatrix"]
+            useCriteria["useCriteria"]
+            useOptions["useOptions"]
+            useScores["useScores"]
+        end
+        
+        scoreCalc["Score Calculator"]
+    end
+    
+    subgraph "Backend Services"
+        direction TB
+        AuthService["Authentication\nService"]
+        MatrixService["Matrix\nService"]
+        CriteriaService["Criteria\nService"]
+        OptionsService["Options\nService"]
+        OptionCriteriaService["Option-Criteria\nService"]
+        SharingService["Sharing\nService"]
+        UserMatrixService["User-Matrix\nService"]
+    end
+    
+    subgraph "Database (Supabase)"
+        direction TB
+        UsersTable[("Users")]
+        MatricesTable[("Matrices")]
+        CriteriaTable[("Criteria")]
+        OptionsTable[("Options")]
+        OptionCriteriaTable[("Option-\nCriteria")]
+        UserMatricesTable[("User-\nMatrices")]
+    end
+    
+    subgraph "Types"
+        MatrixTypes["matrix.types.ts"]
+        DatabaseTypes["database.types.ts"]
+        DecisionMatrixTypes["decisionMatrix.ts"]
+    end
+    
+    %% User flow
+    User --> ReactApp
+    ReactApp --> Auth
+    ReactApp --> Home
+    ReactApp --> MatricesPage
+    ReactApp --> MatrixEdit
+    
+    %% Matrix app components
+    MatrixEdit --> Navigation
+    MatrixEdit --> CriteriaManager
+    MatrixEdit --> OptionsManager
+    MatrixEdit --> ResultsView
+    MatrixEdit --> EditableTitle
+    MatrixEdit --> ThemeToggle
+    
+    %% Hooks connections
+    MatrixEdit --> useMatrix
+    CriteriaManager --> useCriteria
+    OptionsManager --> useOptions
+    ResultsView --> useScores
+    ResultsView --> scoreCalc
+    
+    %% Backend services connections
+    useMatrix --> MatrixService
+    useCriteria --> CriteriaService
+    useOptions --> OptionsService
+    useScores --> OptionCriteriaService
+    Auth --> AuthService
+    
+    %% Database connections
+    AuthService --> UsersTable
+    MatrixService --> MatricesTable
+    CriteriaService --> CriteriaTable
+    OptionsService --> OptionsTable
+    OptionCriteriaService --> OptionCriteriaTable
+    SharingService --> UserMatricesTable
+    UserMatrixService --> UserMatricesTable
+    SharingService --> MatricesTable
+    
+    %% Types connections
+    MatrixTypes -.-> MatrixService
+    MatrixTypes -.-> CriteriaService
+    MatrixTypes -.-> OptionsService
+    MatrixTypes -.-> OptionCriteriaService
+    MatrixTypes -.-> useMatrix
+    MatrixTypes -.-> useCriteria
+    MatrixTypes -.-> useOptions
+    MatrixTypes -.-> useScores
+    DatabaseTypes -.-> MatrixService
+    DecisionMatrixTypes -.-> useMatrix
+    
+    %% Styling
+    classDef page fill:#f5f5ff,stroke:#333,stroke-width:1px
+    classDef feature fill:#e6f3e6,stroke:#333,stroke-width:1px
+    classDef ui fill:#fff5e6,stroke:#333,stroke-width:1px
+    classDef hook fill:#f9f9e6,stroke:#333,stroke-width:1px
+    classDef service fill:#e6e6f9,stroke:#333,stroke-width:1px
+    classDef db fill:#e6f9f9,stroke:#333,stroke-width:1px
+    classDef util fill:#f9e6e6,stroke:#333,stroke-width:1px
+    classDef type fill:#f5e6f9,stroke:#333,stroke-width:1px
+    
+    class Auth,Home,MatricesPage,MatrixEdit page
+    class CriteriaManager,OptionsManager,ResultsView feature
+    class Navigation,EditableTitle,ThemeToggle ui
+    class useMatrix,useCriteria,useOptions,useScores hook
+    class AuthService,MatrixService,CriteriaService,OptionsService,OptionCriteriaService,SharingService,UserMatrixService service
+    class UsersTable,MatricesTable,CriteriaTable,OptionsTable,OptionCriteriaTable,UserMatricesTable db
+    class scoreCalc util
+    class MatrixTypes,DatabaseTypes,DecisionMatrixTypes type

@@ -2,6 +2,8 @@
 
 A modern web application for creating and managing decision matrices. Built with React, TypeScript, and Supabase. Features a sleek dark/light theme switcher and intuitive user interface.
 
+![Decision Matrix Icon](/public/decision-matrix-icon.svg)
+
 ## Features
 
 - 🔐 Simplified authentication (email-based)
@@ -22,7 +24,7 @@ A modern web application for creating and managing decision matrices. Built with
 ## Tech Stack
 
 - **Frontend:**
-  - React 18
+  - React 19
   - TypeScript
   - Bootstrap 5 with theme support
   - React Bootstrap
@@ -35,26 +37,40 @@ A modern web application for creating and managing decision matrices. Built with
   - Row Level Security (RLS)
   - Real-time subscriptions
 
+## Documentation
+
+Comprehensive documentation is available in the [documentation](/documentation) directory:
+
+- [Project Overview](/documentation/project-overview.md)
+- [Getting Started](/documentation/getting-started.md)
+- [Architecture](/documentation/architecture.md)
+- [Application Flow](/documentation/flow.md)
+- [Frontend Guide](/documentation/frontend-guide.md)
+- [Backend Guide](/documentation/backend-guide.md)
+- [API Documentation](/documentation/API.md)
+- [Database Schema](/documentation/database-schema.md)
+- [Supabase Setup](/documentation/supabase-setup.md)
+- [User Guide](/documentation/user-guide.md)
+
 ## Project Structure
 
 ```
 src/
 ├── frontend/
 │   ├── components/     # React components
-│   │   ├── AuthPage.tsx
-│   │   ├── Home.tsx
-│   │   ├── MatrixApp.tsx
-│   │   ├── MatricesPage.tsx
-│   │   └── ...
-│   ├── types/         # TypeScript type definitions
-│   └── utils/         # Frontend utility functions
+│   │   ├── features/   # Feature components
+│   │   ├── layout/     # Layout components
+│   │   └── ui/         # UI components
+│   ├── hooks/          # Custom React hooks
+│   ├── styles/         # CSS styles
+│   └── utils/          # Frontend utility functions
 ├── backend/
-│   ├── lib/           # Backend library code
-│   └── services/      # Backend services
-│       ├── matrixService.ts
-│       ├── userMatrixService.ts
-│       └── ...
-└── App.tsx            # Main application component
+│   ├── lib/            # Backend library code
+│   ├── services/       # Backend services
+│   └── types/          # Backend type definitions
+├── shared/
+│   └── types/          # Shared type definitions
+└── App.tsx             # Main application component
 ```
 
 ## Getting Started

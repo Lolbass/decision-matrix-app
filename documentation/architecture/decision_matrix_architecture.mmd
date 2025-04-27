@@ -1,0 +1,112 @@
+graph TB
+    subgraph "Frontend Layer"
+        App["App.tsx"]
+        
+        subgraph "Pages"
+            AuthPage["AuthPage.tsx"]
+            Home["Home.tsx"]
+            MatricesPage["MatricesPage.tsx"]
+            MatrixApp["MatrixApp.tsx"]
+        end
+        
+        subgraph "Features"
+            CriteriaManager["CriteriaManager.tsx"]
+            OptionsManager["OptionsManager.tsx"]
+            Results["Results.tsx"]
+        end
+        
+        subgraph "Layout"
+            Navigation["Navigation.tsx"]
+        end
+        
+        subgraph "UI Components"
+            EditableTitle["EditableTitle.tsx"]
+            ThemeToggle["ThemeToggle.tsx"]
+        end
+        
+        subgraph "Frontend Hooks"
+            useCriteria["useCriteria.ts"]
+            useMatrix["useMatrix.ts"]
+            useOptions["useOptions.ts"]
+            useScores["useScores.ts"]
+        end
+        
+        subgraph "Frontend Utils"
+            scoreCalculator["scoreCalculator.ts"]
+        end
+    end
+    
+    subgraph "Backend Layer"
+        subgraph "Services"
+            authService["authService.ts"]
+            criteriaService["criteriaService.ts"]
+            matrixService["matrixService.ts"]
+            optionCriteriaService["optionCriteriaService.ts"]
+            optionsService["optionsService.ts"]
+            sharingService["sharingService.ts"]
+            userMatrixService["userMatrixService.ts"]
+        end
+        
+        subgraph "Database"
+            supabase["supabase.ts"]
+        end
+    end
+    
+    subgraph "Shared"
+        subgraph "Types"
+            matrixTypes["matrix.types.ts"]
+            databaseTypes["database.types.ts"]
+            decisionMatrixTypes["decisionMatrix.ts"]
+        end
+    end
+    
+    %% Frontend connections
+    App --> AuthPage
+    App --> Home
+    App --> MatricesPage
+    App --> MatrixApp
+    
+    MatrixApp --> CriteriaManager
+    MatrixApp --> OptionsManager
+    MatrixApp --> Results
+    MatrixApp --> Navigation
+    
+    CriteriaManager --> useCriteria
+    OptionsManager --> useOptions
+    Results --> useScores
+    Results --> scoreCalculator
+    MatrixApp --> useMatrix
+    
+    %% Backend connections
+    useCriteria --> criteriaService
+    useMatrix --> matrixService
+    useOptions --> optionsService
+    useScores --> optionCriteriaService
+    
+    %% Services to database
+    authService --> supabase
+    criteriaService --> supabase
+    matrixService --> supabase
+    optionCriteriaService --> supabase
+    optionsService --> supabase
+    sharingService --> supabase
+    userMatrixService --> supabase
+    
+    %% Types connections
+    criteriaService --> matrixTypes
+    matrixService --> matrixTypes
+    optionCriteriaService --> matrixTypes
+    optionsService --> matrixTypes
+    
+    style App fill:#d0f0d0
+    style supabase fill:#d0d0f0
+    
+    classDef page fill:#f9d5e5,stroke:#333,stroke-width:1px
+    classDef feature fill:#eeeeee,stroke:#333,stroke-width:1px
+    classDef service fill:#d5e8d4,stroke:#333,stroke-width:1px
+    classDef hook fill:#fff2cc,stroke:#333,stroke-width:1px
+    
+    class AuthPage,Home,MatricesPage,MatrixApp page
+    class CriteriaManager,OptionsManager,Results feature
+    class authService,criteriaService,matrixService,optionCriteriaService,optionsService,sharingService,userMatrixService service
+    class useCriteria,useMatrix,useOptions,useScores hook
