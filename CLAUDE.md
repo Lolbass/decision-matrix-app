@@ -26,3 +26,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - Maintain clear separation between frontend (/src/frontend) and backend (/src/backend) code
 - CSS: Use component-scoped CSS files with matching names (Component.tsx, Component.css)
 - Use React Router for navigation between pages
+
+## Project Structure
+- `/src/frontend`: React UI components, hooks, and styles
+- `/src/backend`: Services, database interactions, and API logic
+- `/src/shared`: Types and utilities shared between frontend and backend
