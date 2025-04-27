@@ -287,11 +287,11 @@ export const MatricesPage: React.FC = () => {
                           <div className="d-flex justify-content-between text-muted mb-3" style={{ fontSize: '0.85rem' }}>
                             <div className="d-flex align-items-center gap-1">
                               <CalendarIcon width={16} height={16} />
-                              <span>{new Date(matrix.created_at).toLocaleDateString()}</span>
+                              <span>{new Date(matrix.created_at).toLocaleDateString('fr-FR')}</span>
                             </div>
                             <div className="d-flex align-items-center gap-1">
                               <ClockIcon width={16} height={16} />
-                              <span>Updated {new Date(matrix.updated_at).toLocaleDateString()}</span>
+                              <span>Updated {new Date(matrix.updated_at).toLocaleDateString('fr-FR')}</span>
                             </div>
                           </div>
                         </Card.Body>
@@ -372,11 +372,11 @@ export const MatricesPage: React.FC = () => {
                               <div className="d-flex flex-column align-items-end text-muted" style={{ fontSize: '0.85rem' }}>
                                 <div className="d-flex align-items-center gap-1 mb-1">
                                   <CalendarIcon width={16} height={16} />
-                                  <span>Created: {new Date(matrix.created_at).toLocaleDateString()}</span>
+                                  <span>Created: {new Date(matrix.created_at).toLocaleDateString('fr-FR')}</span>
                                 </div>
                                 <div className="d-flex align-items-center gap-1">
                                   <ClockIcon width={16} height={16} />
-                                  <span>Updated: {new Date(matrix.updated_at).toLocaleDateString()}</span>
+                                  <span>Updated: {new Date(matrix.updated_at).toLocaleDateString('fr-FR')}</span>
                                 </div>
                               </div>
                             </div>
