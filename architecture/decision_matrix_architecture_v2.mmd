@@ -1,0 +1,116 @@
+flowchart TB
+    %% Main Components
+    User((User))
+    
+    %% Application Layers
+    subgraph "Frontend"
+        UI["React UI Layer"]
+        Hooks["Custom Hooks"]
+        Utils["Utilities"]
+    end
+    
+    subgraph "Backend"
+        Services["Backend Services"]
+        DB["Supabase"]
+    end
+    
+    %% UI Components Breakdown
+    subgraph "UI Components"
+        direction TB
+        Pages["Pages (Auth, Home, Matrices)"]
+        MatrixApp["MatrixApp"]
+        
+        subgraph "Core Features"
+            direction LR
+            CriteriaMgr["Criteria Manager"]
+            OptionsMgr["Options Manager"]
+            Results["Results View"]
+        end
+        
+        Layout["Layout Components (Navigation)"]
+        UIComp["UI Components (EditableTitle, ThemeToggle)"]
+    end
+    
+    %% Hook Breakdown
+    subgraph "React Hooks"
+        direction TB
+        useMatrix["useMatrix"]
+        useCriteria["useCriteria"]
+        useOptions["useOptions"]
+        useScores["useScores"]
+    end
+    
+    %% Services Breakdown
+    subgraph "Service Layer"
+        direction TB
+        authSvc["Authentication Service"]
+        matrixSvc["Matrix Service"]
+        criteriaSvc["Criteria Service"]
+        optionsSvc["Options Service"]
+        optCritSvc["Option-Criteria Service"]
+        sharingSvc["Sharing Service"]
+        userMatrixSvc["User Matrix Service"]
+    end
+    
+    %% Database Tables
+    subgraph "Database Tables"
+        direction TB
+        users[("Users")]
+        matrices[("Matrices")]
+        criteria[("Criteria")]
+        options[("Options")]
+        opt_crit[("Option-Criteria")]
+        user_matrices[("User Matrices")]
+    end
+    
+    %% Flow connections
+    User <--> UI
+    
+    UI --> Pages
+    Pages --> MatrixApp
+    MatrixApp --> Layout
+    MatrixApp --> UIComp
+    MatrixApp --> CriteriaMgr
+    MatrixApp --> OptionsMgr
+    MatrixApp --> Results
+    
+    MatrixApp --> Hooks
+    CriteriaMgr --> useCriteria
+    OptionsMgr --> useOptions
+    Results --> useScores
+    Results --> Utils
+    
+    Hooks --> Services
+    useMatrix --> matrixSvc
+    useCriteria --> criteriaSvc
+    useOptions --> optionsSvc
+    useScores --> optCritSvc
+    
+    Services --> DB
+    authSvc --> users
+    matrixSvc --> matrices
+    criteriaSvc --> criteria
+    optionsSvc --> options
+    optCritSvc --> opt_crit
+    sharingSvc --> user_matrices
+    userMatrixSvc --> user_matrices
+    sharingSvc --> matrices
+    
+    %% Shared types connections
+    Types["Shared Types"] --> Services
+    Types --> Hooks
+    
+    %% Styling
+    classDef page fill:#f9d5e5,stroke:#333,stroke-width:1px
+    classDef feature fill:#eeeeee,stroke:#333,stroke-width:1px
+    classDef service fill:#d5e8d4,stroke:#333,stroke-width:1px
+    classDef hook fill:#fff2cc,stroke:#333,stroke-width:1px
+    classDef db fill:#dae8fc,stroke:#333,stroke-width:1px
+    classDef util fill:#f8cecc,stroke:#333,stroke-width:1px
+    
+    class Pages,MatrixApp page
+    class CriteriaMgr,OptionsMgr,Results feature
+    class authSvc,matrixSvc,criteriaSvc,optionsSvc,optCritSvc,sharingSvc,userMatrixSvc service
+    class useMatrix,useCriteria,useOptions,useScores hook
+    class users,matrices,criteria,options,opt_crit,user_matrices db
+    class Utils util
