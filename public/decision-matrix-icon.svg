@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <!-- Background circle -->
+    <circle cx="256" cy="256" r="240" fill="#3ECF8E" />
+    
+    <!-- Grid lines -->
+    <g stroke="white" stroke-width="8" stroke-linecap="round">
+        <!-- Vertical lines -->
+        <line x1="128" y1="128" x2="128" y2="384" />
+        <line x1="256" y1="128" x2="256" y2="384" />
+        <line x1="384" y1="128" x2="384" y2="384" />
+        
+        <!-- Horizontal lines -->
+        <line x1="128" y1="128" x2="384" y2="128" />
+        <line x1="128" y1="256" x2="384" y2="256" />
+        <line x1="128" y1="384" x2="384" y2="384" />
+    </g>
+    
+    <!-- Checkmark in center cell -->
+    <path d="M224 256L256 288L288 224" stroke="white" stroke-width="16" stroke-linecap="round" stroke-linejoin="round" />
+</svg>
