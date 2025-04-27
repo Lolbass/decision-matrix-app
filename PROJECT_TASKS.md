@@ -2,10 +2,10 @@
 
 ## Frontend Improvement Tasks
 
-- [ ] **Restructure Component Organization**
-  - [ ] Create `/components/layout` directory for navigation and layout components
-  - [ ] Create `/components/features` directory for CriteriaManager, OptionsManager
-  - [ ] Create `/components/ui` directory for reusable UI components like EditableTitle, ThemeToggle
+- [x] **Restructure Component Organization**
+  - [x] Create `/components/layout` directory for navigation and layout components
+  - [x] Create `/components/features` directory for CriteriaManager, OptionsManager
+  - [x] Create `/components/ui` directory for reusable UI components like EditableTitle, ThemeToggle
 
 - [ ] **Extract Custom Hooks**
   - [ ] Create `useMatrix.ts` hook for matrix data fetching/updating

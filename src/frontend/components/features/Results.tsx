@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
-import { DecisionMatrix } from '../types/decisionMatrix';
-import { calculateAllScores, getBestOption } from '../utils/scoreCalculator';
+import { DecisionMatrix } from '../../types/decisionMatrix';
+import { calculateAllScores, getBestOption } from '../../utils/scoreCalculator';
 import { ChartBarIcon, TrophyIcon } from '@heroicons/react/24/outline';
 import './Results.css';
 

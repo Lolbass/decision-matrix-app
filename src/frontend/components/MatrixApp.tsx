@@ -1,14 +1,14 @@
 import { useState, useEffect } from 'react';
 import { Container, Row, Col, Card, Button, Alert } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
-import { CriteriaManager } from './CriteriaManager';
-import { OptionsManager } from './OptionsManager';
-import { EditableTitle } from './EditableTitle';
-import { Results } from './Results';
+import { CriteriaManager } from './features/CriteriaManager';
+import { OptionsManager } from './features/OptionsManager';
+import { EditableTitle } from './ui/EditableTitle';
+import { Results } from './features/Results';
 import { DecisionMatrix, Criterion, Option } from '../../shared/types/matrix.types';
 import { matrixService } from '../../backend/services/matrixService';
 import { authService } from '../../backend/services/authService';
-import { Navigation } from './Navigation';
+import { Navigation } from './layout/Navigation';
 import { supabase } from '../../backend/lib/supabase';
 
 interface MatrixAppProps {

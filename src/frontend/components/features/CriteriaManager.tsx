@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Criterion } from '../types/decisionMatrix';
+import { Criterion } from '../../types/decisionMatrix';
 import { PlusIcon, TrashIcon, ScaleIcon } from '@heroicons/react/24/outline';
 import { Card, Form, Button, Modal } from 'react-bootstrap';
 import './CriteriaManager.css';
