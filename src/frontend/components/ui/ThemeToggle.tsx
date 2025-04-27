@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { SunIcon, MoonIcon } from '@heroicons/react/24/outline';
-import '../../../frontend/styles/components/ui/ThemeToggle.css';
+import '../../../styles/components/ui/ThemeToggle.css';
 
 export const ThemeToggle: React.FC = () => {
   const [isDarkMode, setIsDarkMode] = useState<boolean>(() => {
