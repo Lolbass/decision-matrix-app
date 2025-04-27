@@ -13,4 +13,5 @@ This directory contains documentation for the Decision Matrix application.
 - [API Documentation](./API.md)
 - [Database Schema](./database-schema.md)
 - [Supabase Setup](./supabase-setup.md)
+- [Deployment Guide](./deployment.md)
 - [User Guide](./user-guide.md)

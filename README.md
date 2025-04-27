@@ -50,6 +50,7 @@ Comprehensive documentation is available in the [documentation](/documentation) 
 - [API Documentation](/documentation/API.md)
 - [Database Schema](/documentation/database-schema.md)
 - [Supabase Setup](/documentation/supabase-setup.md)
+- [Deployment Guide](/documentation/deployment.md)
 - [User Guide](/documentation/user-guide.md)
 
 ## Project Structure
