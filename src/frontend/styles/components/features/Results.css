@@ -1,0 +1,253 @@
+.results-container {
+  background-color: var(--bg-secondary);
+  border-radius: 10px;
+}
+
+.results-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 1rem 0 1.5rem;
+}
+
+.header-title {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.header-title h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.header-icon {
+  width: 1.5rem;
+  height: 1.5rem;
+  color: var(--accent-primary);
+}
+
+/* Empty state */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 2rem;
+  text-align: center;
+  background: var(--bg-primary);
+  border-radius: 12px;
+  margin: 1rem 0;
+}
+
+.empty-icon {
+  width: 3rem;
+  height: 3rem;
+  color: var(--text-secondary);
+  margin-bottom: 1rem;
+}
+
+.empty-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0 0 0.5rem;
+}
+
+.empty-text {
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+/* Best option section */
+.best-option-container {
+  background: var(--bg-primary);
+  border-radius: 10px;
+  padding: 1rem;
+  border-left: 4px solid var(--accent-warning);
+}
+
+.best-option-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--text-primary);
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-bottom: 0.75rem;
+}
+
+.trophy-icon {
+  width: 1.25rem;
+  height: 1.25rem;
+  color: var(--accent-warning);
+}
+
+.best-option-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0;
+}
+
+.best-option-card h3 {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.best-score {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--accent-primary);
+  background: rgba(var(--primary-rgb), 0.1);
+  padding: 0.25rem 0.75rem;
+  border-radius: 1rem;
+}
+
+/* Results table */
+.results-table-container {
+  overflow-x: auto;
+  background: var(--bg-primary);
+  border-radius: 8px;
+  margin-top: 1rem;
+}
+
+.results-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.results-table thead {
+  background-color: var(--bg-secondary);
+}
+
+.results-table th {
+  padding: 0.75rem 1rem;
+  text-align: left;
+  font-weight: 600;
+  color: var(--text-secondary);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.results-table td {
+  padding: 1rem;
+  border-bottom: 1px solid var(--border-color);
+  vertical-align: middle;
+}
+
+.results-table tbody tr:hover {
+  background-color: var(--bg-secondary);
+}
+
+.best-option-row {
+  background-color: rgba(var(--warning-rgb), 0.08);
+}
+
+.rank-cell {
+  width: 50px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-align: center;
+}
+
+.best-option-row .rank-cell {
+  color: var(--accent-warning);
+  font-weight: 700;
+}
+
+.option-cell {
+  min-width: 200px;
+}
+
+.option-name {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.mini-trophy-icon {
+  width: 1rem;
+  height: 1rem;
+  color: var(--accent-warning);
+}
+
+.option-description {
+  margin-top: 0.25rem;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.score-cell {
+  font-weight: 600;
+  width: 80px;
+  text-align: center;
+}
+
+.bar-cell {
+  width: 30%;
+  min-width: 200px;
+}
+
+.score-bar-container {
+  height: 1.5rem;
+  background: var(--bg-secondary);
+  border-radius: 0.75rem;
+  overflow: hidden;
+}
+
+.score-bar {
+  height: 100%;
+  background: var(--accent-primary);
+  border-radius: 0.75rem;
+  transition: width 0.5s ease;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 0.75rem;
+}
+
+.bar-score {
+  color: var(--bg-primary);
+  font-weight: 600;
+  font-size: 0.8rem;
+}
+
+/* Light mode specific styles */
+[data-bs-theme="light"] .score-bar {
+  background: #0d6efd;
+  opacity: 0.8;
+}
+
+[data-bs-theme="light"] .score-bar-container {
+  background: #f0f0f0;
+  border: 1px solid var(--border-color);
+}
+
+[data-bs-theme="light"] .bar-score {
+  color: white;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+[data-bs-theme="light"] .weight-progress {
+  background: #0d6efd !important;
+  opacity: 0.8;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

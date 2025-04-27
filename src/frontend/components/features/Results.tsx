@@ -1,7 +1,7 @@
 import { DecisionMatrix } from '../../../shared/types/matrix.types';
 import { ChartBarIcon, TrophyIcon } from '@heroicons/react/24/outline';
 import { useScores } from '../../hooks/useScores';
-import './Results.css';
+import '../../../frontend/styles/components/features/Results.css';
 
 interface ResultsProps {
   matrix: DecisionMatrix;

@@ -13,9 +13,9 @@
   - [x] Create `useOptions.ts` hook for options management
   - [x] Create `useScores.ts` hook for score calculations
 
-- [ ] **Improve Style Organization**
-  - [ ] Move CSS files to `/styles` directory with component-matching names
-  - [ ] Consider implementing CSS modules or styled-components
+- [x] **Improve Style Organization**
+  - [x] Move CSS files to `/styles` directory with component-matching names
+  - [x] Consider implementing CSS modules or styled-components
 
 - [ ] **Consolidate Type Definitions**
   - [ ] Resolve duplication between `src/frontend/types/decisionMatrix.ts` and `src/shared/types/matrix.types.ts`

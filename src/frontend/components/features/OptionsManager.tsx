@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Option, Criterion, ScoringScale } from '../../../shared/types/matrix.types';
 import { PlusIcon, TrashIcon, ListBulletIcon, Squares2X2Icon, StarIcon } from '@heroicons/react/24/outline';
 import { Form, Button, Modal, OverlayTrigger, Tooltip } from 'react-bootstrap';
-import './OptionsManager.css';
+import '../../../frontend/styles/components/features/OptionsManager.css';
 
 interface OptionsManagerProps {
   options: Option[];
