@@ -1,15 +1,14 @@
-import { useState, useEffect } from 'react';
 import { Container, Row, Col, Card, Button, Alert } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
 import { CriteriaManager } from './features/CriteriaManager';
 import { OptionsManager } from './features/OptionsManager';
 import { EditableTitle } from './ui/EditableTitle';
 import { Results } from './features/Results';
-import { DecisionMatrix, Criterion, Option } from '../../shared/types/matrix.types';
-import { matrixService } from '../../backend/services/matrixService';
 import { authService } from '../../backend/services/authService';
 import { Navigation } from './layout/Navigation';
-import { supabase } from '../../backend/lib/supabase';
+import { useMatrix } from '../hooks/useMatrix';
+import { useCriteria } from '../hooks/useCriteria';
+import { Option } from '../../shared/types/matrix.types';
 
 interface MatrixAppProps {
   onSignOut: () => void;
@@ -17,104 +16,28 @@ interface MatrixAppProps {
 
 export function MatrixApp({ onSignOut }: MatrixAppProps) {
   const { id } = useParams<{ id: string }>();
-  const [matrix, setMatrix] = useState<DecisionMatrix>({
-    id: id || crypto.randomUUID(),
-    name: 'Loading...',
-    description: '',
-    ownerId: '',
-    criteria: [],
-    options: [],
-    created_at: new Date(),
-    updated_at: new Date(),
+  
+  const { 
+    matrix, 
+    isLoading, 
+    isSaving, 
+    saveError, 
+    saveSuccess, 
+    handleMatrixChange, 
+    handleTitleSave, 
+    saveMatrix 
+  } = useMatrix(id);
+  
+  const {
+    showInvalidWeights,
+    handleCriteriaChange
+  } = useCriteria({
+    criteria: matrix.criteria,
+    onUpdate: (criteria) => handleMatrixChange({ criteria })
   });
-
-
-  const [showInvalidWeights, setShowInvalidWeights] = useState(false);
-  const [isSaving, setIsSaving] = useState(false);
-  const [saveError, setSaveError] = useState<string | null>(null);
-  const [saveSuccess, setSaveSuccess] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    const loadMatrixData = async () => {
-      try {
-        setIsLoading(true);
-        setSaveError(null);
-
-        // Get the current user's ID
-        const { data: { user }, error: userError } = await supabase.auth.getUser();
-        if (userError) throw userError;
-        
-        if (user) {
-          if (id) {
-            // Load the specific matrix
-            const loadedMatrix = await matrixService.getMatrixById(id);
-            if (loadedMatrix) {
-              setMatrix({
-                ...loadedMatrix,
-                ownerId: user.id,
-              });
-            }
-          } else {
-            // Create a new matrix
-            setMatrix((prev) => ({
-              ...prev,
-              ownerId: user.id,
-            }));
-          }
-        }
-      } catch (error) {
-        console.error('Error loading matrix:', error);
-        setSaveError('Failed to load matrix');
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    loadMatrixData();
-  }, [id]);
-
-  const handleMatrixChange = (updates: Partial<DecisionMatrix>) => {
-    setMatrix((prev: DecisionMatrix) => ({ 
-      ...prev, 
-      ...updates,
-      updated_at: new Date(),
-    }));
-    setSaveSuccess(false);
-  };
-
-  const handleTitleSave = (title: string, description?: string) => {
-    handleMatrixChange({ name: title, description });
-  };
-
-  const handleCriteriaChange = (criteria: Criterion[]) => {
-    const totalWeight = criteria.reduce((sum, criterion) => sum + criterion.weight, 0);
-    if (Math.abs(totalWeight - 1) > 0.01) {
-      setShowInvalidWeights(true);
-    } else {
-      setShowInvalidWeights(false);
-    }
-    handleMatrixChange({ criteria });
-  };
 
   const handleOptionsChange = (options: Option[]) => {
     handleMatrixChange({ options });
-  };
-
-
-
-  const handleSave = async () => {
-    try {
-      setIsSaving(true);
-      setSaveError(null);
-      await matrixService.saveMatrix(matrix);
-      setSaveSuccess(true);
-    } catch (error) {
-      console.error('Error saving matrix:', error);
-      setSaveError(error instanceof Error ? error.message : 'Failed to save matrix');
-    } finally {
-      setIsSaving(false);
-    }
   };
 
   const handleSignOut = async () => {
@@ -149,7 +72,7 @@ export function MatrixApp({ onSignOut }: MatrixAppProps) {
                     />
                     <Button 
                       variant="primary" 
-                      onClick={handleSave}
+                      onClick={saveMatrix}
                       disabled={isSaving}
                       className="px-4"
                     >
@@ -165,13 +88,13 @@ export function MatrixApp({ onSignOut }: MatrixAppProps) {
               </Card>
 
               {saveError && (
-                <Alert variant="danger" className="mb-3" onClose={() => setSaveError(null)} dismissible>
+                <Alert variant="danger" className="mb-3" onClose={() => handleMatrixChange({})} dismissible>
                   {saveError}
                 </Alert>
               )}
 
               {saveSuccess && (
-                <Alert variant="success" className="mb-3" onClose={() => setSaveSuccess(false)} dismissible>
+                <Alert variant="success" className="mb-3" onClose={() => handleMatrixChange({})} dismissible>
                   Matrix saved successfully!
                 </Alert>
               )}

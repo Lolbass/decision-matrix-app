@@ -1,7 +1,6 @@
-import { useMemo } from 'react';
-import { DecisionMatrix } from '../../types/decisionMatrix';
-import { calculateAllScores, getBestOption } from '../../utils/scoreCalculator';
+import { DecisionMatrix } from '../../../shared/types/matrix.types';
 import { ChartBarIcon, TrophyIcon } from '@heroicons/react/24/outline';
+import { useScores } from '../../hooks/useScores';
 import './Results.css';
 
 interface ResultsProps {
@@ -9,8 +8,7 @@ interface ResultsProps {
 }
 
 export function Results({ matrix }: ResultsProps) {
-  const scores = useMemo(() => calculateAllScores(matrix), [matrix]);
-  const bestOption = useMemo(() => getBestOption(matrix), [matrix]);
+  const { scores, bestOption, sortedOptions } = useScores(matrix);
 
   if (matrix.options.length === 0) {
     return (
@@ -45,44 +43,42 @@ export function Results({ matrix }: ResultsProps) {
             </tr>
           </thead>
           <tbody>
-            {[...matrix.options]
-              .sort((a, b) => scores[b.id] - scores[a.id])
-              .map((option, index) => {
-                const score = scores[option.id];
-                const isBest = bestOption?.id === option.id;
-                const scorePercentage = (score / 5) * 100;
-                
-                return (
-                  <tr 
-                    key={option.id} 
-                    className={isBest ? 'best-option-row' : ''}
-                  >
-                    <td className="rank-cell">{index + 1}</td>
-                    <td className="option-cell">
-                      <div className="option-name">
-                        {option.name}
-                        {isBest && <TrophyIcon className="mini-trophy-icon" />}
+            {sortedOptions.map((option, index) => {
+              const score = scores[option.id];
+              const isBest = bestOption?.id === option.id;
+              const scorePercentage = (score / 5) * 100;
+              
+              return (
+                <tr 
+                  key={option.id} 
+                  className={isBest ? 'best-option-row' : ''}
+                >
+                  <td className="rank-cell">{index + 1}</td>
+                  <td className="option-cell">
+                    <div className="option-name">
+                      {option.name}
+                      {isBest && <TrophyIcon className="mini-trophy-icon" />}
+                    </div>
+                    {option.description && (
+                      <div className="option-description">{option.description}</div>
+                    )}
+                  </td>
+                  <td className="score-cell">{score.toFixed(1)}</td>
+                  <td className="bar-cell">
+                    <div className="score-bar-container">
+                      <div 
+                        className="score-bar" 
+                        style={{ width: `${scorePercentage}%` }}
+                      >
+                        {scorePercentage > 40 && (
+                          <span className="bar-score">{score.toFixed(1)}</span>
+                        )}
                       </div>
-                      {option.description && (
-                        <div className="option-description">{option.description}</div>
-                      )}
-                    </td>
-                    <td className="score-cell">{score.toFixed(1)}</td>
-                    <td className="bar-cell">
-                      <div className="score-bar-container">
-                        <div 
-                          className="score-bar" 
-                          style={{ width: `${scorePercentage}%` }}
-                        >
-                          {scorePercentage > 40 && (
-                            <span className="bar-score">{score.toFixed(1)}</span>
-                          )}
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
-                );
-              })}
+                    </div>
+                  </td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </div>

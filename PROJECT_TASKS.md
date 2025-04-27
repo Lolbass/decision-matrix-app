@@ -7,11 +7,11 @@
   - [x] Create `/components/features` directory for CriteriaManager, OptionsManager
   - [x] Create `/components/ui` directory for reusable UI components like EditableTitle, ThemeToggle
 
-- [ ] **Extract Custom Hooks**
-  - [ ] Create `useMatrix.ts` hook for matrix data fetching/updating
-  - [ ] Create `useCriteria.ts` hook for criteria management
-  - [ ] Create `useOptions.ts` hook for options management
-  - [ ] Create `useScores.ts` hook for score calculations
+- [x] **Extract Custom Hooks**
+  - [x] Create `useMatrix.ts` hook for matrix data fetching/updating
+  - [x] Create `useCriteria.ts` hook for criteria management
+  - [x] Create `useOptions.ts` hook for options management
+  - [x] Create `useScores.ts` hook for score calculations
 
 - [ ] **Improve Style Organization**
   - [ ] Move CSS files to `/styles` directory with component-matching names
