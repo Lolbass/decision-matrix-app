@@ -7,8 +7,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - Dev: `npm run dev` (Vite dev server)
 - Lint: `npm run lint` (ESLint)
 - TypeCheck: `tsc -b` (TypeScript type check)
+- Preview: `npm run preview` (Preview production build)
 
 ## Code Guidelines
+- Apply SOLID principles in all code
 - Use TypeScript with strict type checking
 - React components use functional style with hooks (no class components)
 - Import order: React/libraries → local modules → types/utils
