@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { userMatrixService } from '../../backend/services/userMatrixService';
 import { authService } from '../../backend/services/authService';
 import type { DecisionMatrix } from '../../shared/types/matrix.types';
-import { Navigation } from './Navigation';
+import { Navigation } from './layout/Navigation';
 import { 
   PlusCircleIcon, 
   ClipboardDocumentIcon, 

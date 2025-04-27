@@ -1,4 +1,4 @@
-import { Criterion, Option, DecisionMatrix } from '../types/decisionMatrix';
+import { Criterion, Option, DecisionMatrix } from '../../shared/types/matrix.types';
 
 export function calculateOptionScore(option: Option, criteria: Criterion[]): number {
   return criteria.reduce((total, criterion) => {

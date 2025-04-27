@@ -1,26 +1,28 @@
 # Project Tasks
 
 ## Frontend Improvement Tasks
+### Completed
 
-- [ ] **Restructure Component Organization**
-  - [ ] Create `/components/layout` directory for navigation and layout components
-  - [ ] Create `/components/features` directory for CriteriaManager, OptionsManager
-  - [ ] Create `/components/ui` directory for reusable UI components like EditableTitle, ThemeToggle
+- [x] **Restructure Component Organization**
+  - [x] Create `/components/layout` directory for navigation and layout components
+  - [x] Create `/components/features` directory for CriteriaManager, OptionsManager
+  - [x] Create `/components/ui` directory for reusable UI components like EditableTitle, ThemeToggle
 
-- [ ] **Extract Custom Hooks**
-  - [ ] Create `useMatrix.ts` hook for matrix data fetching/updating
-  - [ ] Create `useCriteria.ts` hook for criteria management
-  - [ ] Create `useOptions.ts` hook for options management
-  - [ ] Create `useScores.ts` hook for score calculations
+- [x] **Extract Custom Hooks**
+  - [x] Create `useMatrix.ts` hook for matrix data fetching/updating
+  - [x] Create `useCriteria.ts` hook for criteria management
+  - [x] Create `useOptions.ts` hook for options management
+  - [x] Create `useScores.ts` hook for score calculations
 
-- [ ] **Improve Style Organization**
-  - [ ] Move CSS files to `/styles` directory with component-matching names
-  - [ ] Consider implementing CSS modules or styled-components
+- [x] **Improve Style Organization**
+  - [x] Move CSS files to `/styles` directory with component-matching names
+  - [x] Consider implementing CSS modules or styled-components
 
-- [ ] **Consolidate Type Definitions**
-  - [ ] Resolve duplication between `src/frontend/types/decisionMatrix.ts` and `src/shared/types/matrix.types.ts`
-  - [ ] Define clear boundaries between frontend/backend types
+- [x] **Consolidate Type Definitions**
+  - [x] Resolve duplication between `src/frontend/types/decisionMatrix.ts` and `src/shared/types/matrix.types.ts`
+  - [x] Define clear boundaries between frontend/backend types
 
+### To Do
 - [ ] **Implement State Management**
   - [ ] Add Context API for matrix data to reduce prop drilling
   - [ ] Consider React Query for data fetching and caching
@@ -33,7 +35,7 @@
   - [ ] Use consistent file extensions (.tsx for components with JSX)
   - [ ] Align component file names with export names
 
-## Dockerization Tasks
+## Dockerization Tasks (Future)
 
 - [ ] **Setup Docker Configuration**
   - [ ] Create Dockerfile with multi-stage build (Node.js for build, Nginx for serving)

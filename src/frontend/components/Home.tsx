@@ -3,7 +3,7 @@ import { Container, Row, Col, Button, Modal, Form, Alert } from 'react-bootstrap
 import { useNavigate } from 'react-router-dom';
 import { matrixService } from '../../backend/services/matrixService';
 import { authService } from '../../backend/services/authService';
-import { Navigation } from './Navigation';
+import { Navigation } from './layout/Navigation';
 
 export const Home: React.FC = () => {
   const navigate = useNavigate();

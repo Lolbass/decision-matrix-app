@@ -1,9 +1,9 @@
 import React from 'react';
 import { Navbar, Container, Button, Nav } from 'react-bootstrap';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { ThemeToggle } from './ThemeToggle.tsx';
+import { ThemeToggle } from '../ui/ThemeToggle.tsx';
 import { ChartBarIcon, TableCellsIcon, ArrowRightOnRectangleIcon, HomeIcon } from '@heroicons/react/24/outline';
-import './Navigation.css';
+import '../../styles/components/layout/Navigation.css';
 
 interface NavigationProps {
   onSignOut?: () => void;

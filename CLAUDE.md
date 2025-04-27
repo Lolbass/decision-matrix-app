@@ -21,3 +21,6 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - Follow existing naming: PascalCase for components, camelCase for functions/variables
 - Keep components focused and composable
 - Use relative imports within modules, absolute for cross-module references
+- Format code using consistent indentation (2 spaces) and semicolons
+- Use Supabase for backend services and database operations
+- Maintain clear separation between frontend and backend code
