@@ -81,8 +81,14 @@ deleteOption(id: string): Promise<void>
 
 ### `optionCriteriaService.ts`
 
+The scoring system uses a **1-10 scale** where:
+- **0**: No score assigned (default)
+- **1**: Lowest score (poor performance against criterion)  
+- **10**: Highest score (excellent performance against criterion)
+
 ```typescript
 // Set a score for an option against a criterion
+// score: number (0-10, where 0 = no score, 1-10 = scoring scale)
 setScore(optionId: string, criterionId: string, score: number): Promise<void>
 
 // Get scores for an option
@@ -133,7 +139,7 @@ interface Option {
 interface OptionCriteriaScore {
   option_id: string;
   criterion_id: string;
-  score: number;
+  score: number; // 0-10 (0 = no score, 1-10 = scoring scale)
   created_at: string;
   updated_at: string;
 }

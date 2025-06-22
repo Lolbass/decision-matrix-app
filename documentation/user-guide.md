@@ -21,8 +21,15 @@
 
 ### Step 3: Score Options
 
-1. For each option, assign scores against each criterion (1-10)
+1. For each option, assign scores against each criterion using the **1-10 scale**:
+   - **1-3**: Poor performance (does not meet criterion well)
+   - **4-6**: Average performance (meets criterion adequately) 
+   - **7-8**: Good performance (meets criterion well)
+   - **9-10**: Excellent performance (exceeds criterion expectations)
+   - **0** or **"-"**: No score assigned yet
+
 2. Consider how well each option meets the criteria
+3. Be consistent in your scoring approach across all options
 
 ### Step 4: Review Results
 

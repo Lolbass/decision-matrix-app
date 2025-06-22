@@ -5,12 +5,21 @@ Decision Matrix is a web application that helps users make complex decisions by 
 ## Key Features
 
 - Matrix creation and management
-- Custom criteria with adjustable weights
-- Option management and scoring
-- Result visualization and analysis
+- Custom criteria with adjustable weights (percentage-based)
+- Option management with **1-10 scoring scale**
+- Weighted calculation and result visualization
 - Matrix sharing capabilities
 - User authentication
 - Responsive design
+
+## Scoring System
+
+The application uses a **1-10 scoring scale** for evaluating options:
+- **1**: Lowest score (poor performance)
+- **10**: Highest score (excellent performance)  
+- **0**: No score assigned (default state)
+
+Final scores are calculated by multiplying each option's criterion score by the criterion's weight, then summing across all criteria.
 
 ## Tech Stack
 

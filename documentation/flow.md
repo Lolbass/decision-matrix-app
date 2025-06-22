@@ -54,11 +54,11 @@ This document describes the typical user flow and data flow within the Decision 
 
 ### Scoring Options
 
-1. User selects scores for options against criteria
+1. User selects scores for options against criteria (1-10 scale)
 2. `useOptions` hook calls `setScore` from `optionCriteriaService`
-3. Score is saved to the database
-4. `useScores` hook recalculates total scores
-5. Results view is updated with new calculations
+3. Score is saved to the database with validation (0-10 range)
+4. `useScores` hook recalculates weighted total scores
+5. Results view is updated with new calculations and visualizations
 
 ## Component Interaction
 
