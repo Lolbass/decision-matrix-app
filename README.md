@@ -101,6 +101,21 @@ src/
 
 5. Open your browser and navigate to `http://localhost:5173` (or the port shown in the terminal)
 
+6. Run tests:
+   ```bash
+   npm test
+   ```
+
+## Testing
+
+The application includes end-to-end tests using Playwright:
+
+- Authentication tests (login, signup)
+- User flow tests
+- Form validation tests
+
+For more details, see the [tests/README.md](tests/README.md) file.
+
 ## Application Flow
 
 1. **Welcome Page** (`/`)

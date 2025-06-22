@@ -61,7 +61,7 @@ CREATE TABLE IF NOT EXISTS public.options (
 CREATE TABLE IF NOT EXISTS public.option_criteria (
     option_id UUID NOT NULL REFERENCES public.options(id) ON DELETE CASCADE,
     criterion_id UUID NOT NULL REFERENCES public.criteria(id) ON DELETE CASCADE,
-    score INTEGER NOT NULL CHECK (score >= 0 AND score <= 5),
+    score INTEGER NOT NULL CHECK (score >= 0 AND score <= 10),
     created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc'::text, NOW()) NOT NULL,
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc'::text, NOW()) NOT NULL,
     PRIMARY KEY (option_id, criterion_id)

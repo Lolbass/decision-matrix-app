@@ -46,7 +46,7 @@ export function Results({ matrix }: ResultsProps) {
             {sortedOptions.map((option, index) => {
               const score = scores[option.id];
               const isBest = bestOption?.id === option.id;
-              const scorePercentage = (score / 5) * 100;
+              const scorePercentage = (score / 10) * 100;
               
               return (
                 <tr 

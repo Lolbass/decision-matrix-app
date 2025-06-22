@@ -35,6 +35,40 @@
   - [ ] Use consistent file extensions (.tsx for components with JSX)
   - [ ] Align component file names with export names
 
+## Testing Tasks
+
+- [x] **Setup Playwright Testing Environment**
+  - [x] Install Playwright and necessary dependencies
+  - [x] Configure Playwright for TypeScript and React
+  - [x] Create test directory structure and utility files
+
+- [ ] **Component Tests**
+  - [ ] Create tests for EditableTitle component
+  - [ ] Create tests for ThemeToggle component
+  - [ ] Create tests for Navigation component
+
+- [ ] **Feature Tests**
+  - [ ] Test criteria creation, editing, and deletion flows
+  - [ ] Test options creation, editing, and deletion flows
+  - [ ] Test scoring functionality and results calculation
+
+- [x] **Authentication Tests**
+  - [x] Test login functionality with valid credentials
+  - [x] Test login functionality with invalid credentials
+  - [x] Test registration form validation
+  - [x] Test authentication persistence
+  - [ ] Test protected routes and authentication state
+
+- [ ] **End-to-End Workflows**
+  - [ ] Test complete matrix creation workflow
+  - [ ] Test matrix sharing functionality
+  - [ ] Test matrix results visualization
+
+- [ ] **Accessibility Testing**
+  - [ ] Verify component accessibility with Playwright's a11y tools
+  - [ ] Test keyboard navigation throughout the application
+  - [ ] Ensure proper screen reader support
+
 ## Dockerization Tasks (Future)
 
 - [ ] **Setup Docker Configuration**

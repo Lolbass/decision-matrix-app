@@ -143,7 +143,7 @@ export function OptionsManager({ options, criteria, onUpdate }: OptionsManagerPr
                           className="score-select"
                         >
                           <option value={0}>-</option>
-                          {[1, 2, 3, 4, 5].map(score => (
+                          {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(score => (
                             <option key={score} value={score}>{score}</option>
                           ))}
                         </Form.Select>
@@ -157,7 +157,7 @@ export function OptionsManager({ options, criteria, onUpdate }: OptionsManagerPr
                       <div className="score-display">
                         <div 
                           className="score-bar" 
-                          style={{ width: `${(avgScore / 5) * 100}%` }} 
+                          style={{ width: `${(avgScore / 10) * 100}%` }} 
                         />
                         <span className="score-value">{avgScore.toFixed(1)}</span>
                       </div>
@@ -210,7 +210,7 @@ export function OptionsManager({ options, criteria, onUpdate }: OptionsManagerPr
                           className="score-select"
                         >
                           <option value={0}>-</option>
-                          {[1, 2, 3, 4, 5].map(score => (
+                          {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(score => (
                             <option key={score} value={score}>{score}</option>
                           ))}
                         </Form.Select>
