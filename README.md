@@ -10,7 +10,7 @@ A modern web application for creating and managing decision matrices. Built with
 - 📊 Create and manage decision matrices
 - ⚖️ Define criteria with weights
 - 📝 Add and evaluate options
-- 📈 Automatic score calculation with visual score bars
+- 📈 **1-10 scoring scale** with automatic weighted calculation and visual score bars
 - 🎨 Modern, responsive UI with dark/light theme support
 - 🌓 Theme switcher with persistent preferences
 - 🔍 Advanced search and sorting capabilities
@@ -100,6 +100,30 @@ src/
    ```
 
 5. Open your browser and navigate to `http://localhost:5173` (or the port shown in the terminal)
+
+6. Run tests:
+   ```bash
+   npm test
+   ```
+
+## Testing
+
+The application includes end-to-end tests using Playwright:
+
+- Authentication tests (login, signup)
+- User flow tests
+- Form validation tests
+
+For more details, see the [tests/README.md](tests/README.md) file.
+
+## Scoring System
+
+The application uses a **1-10 scoring scale** for evaluating options against criteria:
+- **1**: Poorest performance  
+- **10**: Best performance
+- **0**: No score assigned (shows as "-" in interface)
+
+Final scores are calculated using weighted averages based on criterion importance.
 
 ## Application Flow
 
